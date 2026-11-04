@@ -1,0 +1,103 @@
+{
+  "1": [
+    {
+      "id": "U1_01",
+      "q_en": "Which level of teaching involves the highest cognitive effort and problem-solving skills?",
+      "q_hi": "शिक्षण का कौन सा स्तर उच्चतम संज्ञानात्मक प्रयास और समस्या-समाधान कौशल को शामिल करता है?",
+      "options_en": ["Memory Level", "Understanding Level", "Reflective Level", "Autonomous Level"],
+      "options_hi": ["स्मृति स्तर", "बोध स्तर", "विमर्शक स्तर", "स्वायत्त स्तर"],
+      "ans": 2,
+      "exp": "Reflective level (Hunt model) is the highest level requiring deep critical reflection."
+    },
+    {
+      "id": "U1_02",
+      "q_en": "Diagnostic evaluation is primarily conducted to:",
+      "q_hi": "निदानात्मक मूल्यांकन (Diagnostic Evaluation) मुख्य रूप से किसलिए किया जाता है?",
+      "options_en": ["Assign terminal grades", "Find out causes of persistent learning problems", "Select students for scholarships", "Judge teacher efficiency"],
+      "options_hi": ["अंतिम ग्रेड देने के लिए", "सीखने में लगातार आ रही कठिनाइयों के कारणों का पता लगाने के लिए", "छात्रवृत्ति हेतु चयन करने के लिए", "शिक्षक की दक्षता जांचने के लिए"],
+      "ans": 1,
+      "exp": "Diagnostic evaluation identifies persistent learning difficulties and their underlying causes."
+    },
+    {
+      "id": "U1_03",
+      "q_en": "Which of the following is a teacher-centered method of instruction?",
+      "q_hi": "निम्नलिखित में से कौन सी अनुदेशन की शिक्षक-केंद्रित विधि है?",
+      "options_en": ["Lecture method", "Project method", "Collaborative learning", "Discovery learning"],
+      "options_hi": ["व्याख्यान विधि (Lecture method)", "परियोजना विधि", "सहयोगात्मक अधिगम", "खोज अधिगम"],
+      "ans": 0,
+      "exp": "The lecture method is direct, expository, and teacher-centric."
+    },
+    {
+      "id": "U1_04",
+      "q_en": "SWAYAM aims to achieve which three cardinal principles of Education Policy?",
+      "q_hi": "SWAYAM शिक्षा नीति के किन तीन प्रमुख सिद्धांतों को प्राप्त करने का लक्ष्य रखता है?",
+      "options_en": ["Access, Equity, Quality", "Examination, Degree, Placement", "Digital, Offline, International", "Books, Pen, Paper"],
+      "options_hi": ["पहुंच, समानता, गुणवत्ता", "परीक्षा, डिग्री, प्लेसमेंट", "डिजिटल, ऑफलाइन, अंतर्राष्ट्रीय", "पुस्तक, कलम, कागज"],
+      "ans": 0,
+      "exp": "The three cardinal principles are Access, Equity, and Quality."
+    },
+    {
+      "id": "U1_05",
+      "q_en": "In Bloom's revised taxonomy of cognitive domain, the highest level is:",
+      "q_hi": "ब्लूम के संशोधित संज्ञानात्मक क्षेत्र के वर्गीकरण में सर्वोच्च स्तर कौन सा है?",
+      "options_en": ["Evaluating", "Creating", "Analyzing", "Remembering"],
+      "options_hi": ["मूल्यांकन (Evaluating)", "सृजन (Creating)", "विश्लेषण (Analyzing)", "स्मरण (Remembering)"],
+      "ans": 1,
+      "exp": "In Anderson and Krathwohl's revision, 'Creating' is the highest level."
+    },
+    {
+      "id": "U1_06",
+      "q_en": "Criterion-Referenced testing assesses a student's performance against:",
+      "q_hi": "मानदंड-संदर्भित परीक्षण में छात्र के प्रदर्शन का आकलन किसके विरुद्ध किया जाता है?",
+      "options_en": ["Other peers in the class", "A predefined clearly defined standard", "The top 10 percentile", "Previous year's toppers"],
+      "options_hi": ["कक्षा के अन्य सहपाठियों के विरुद्ध", "एक पूर्वनिर्धारित स्पष्ट मानक के विरुद्ध", "शीर्ष 10 पर्सेंटाइल के विरुद्ध", "पिछले वर्ष के टॉपर्स के विरुद्ध"],
+      "ans": 1,
+      "exp": "Criterion-referenced assessment checks mastery against predetermined specific criteria."
+    }
+  ],
+  "2": [
+    {
+      "id": "U2_01",
+      "q_en": "A researcher is conducting a study to solve an immediate local problem in a primary school. What type of research is this?",
+      "q_hi": "एक शोधकर्ता प्राथमिक विद्यालय में किसी तात्कालिक स्थानीय समस्या के समाधान के लिए अध्ययन कर रहा है। यह किस प्रकार का शोध है?",
+      "options_en": ["Fundamental Research", "Applied Research", "Action Research", "Historical Research"],
+      "options_hi": ["मौलिक शोध", "अनुप्रयुक्त शोध", "क्रियात्मक शोध (Action Research)", "ऐतिहासिक शोध"],
+      "ans": 2,
+      "exp": "Action research focuses on immediate, local practical problems."
+    },
+    {
+      "id": "U2_02",
+      "q_en": "Rejecting a true Null Hypothesis ($H_0$) is termed as:",
+      "q_hi": "एक सत्य शून्य परिकल्पना ($H_0$) को अस्वीकार करना क्या कहलाता है?",
+      "options_en": ["Type I Error", "Type II Error", "Standard Error", "Sampling Flaw"],
+      "options_hi": ["टाइप I त्रुटि (Type I Error)", "टाइप II त्रुटि", "मानक त्रुटि", "नमूनाकरण दोष"],
+      "ans": 0,
+      "exp": "Type I error (alpha error) occurs when true H0 is rejected."
+    }
+  ],
+  "3": [
+    {
+      "id": "U3_01",
+      "passage_en": "Higher education in the 21st century is undergoing a massive digital transformation. Online learning platforms have democratized access to elite knowledge, but they also bring challenges regarding digital divides, lack of interpersonal socialization, and screen fatigue. A blended learning model that combines digital flexibility with physical classroom discussions is increasingly considered the most sustainable framework.",
+      "passage_hi": "21वीं सदी में उच्च शिक्षा एक बड़े डिजिटल बदलाव से गुजर रही है। ऑनलाइन लर्निंग प्लेटफॉर्मों ने ज्ञान तक पहुंच को सुलभ बनाया है, लेकिन ये डिजिटल विभाजन, सामाजिक संवाद की कमी और स्क्रीन थकान जैसी चुनौतियाँ भी लाते हैं। मिश्रित अधिगम (Blended Learning) मॉडल, जो डिजिटल लचीलेपन को कक्षा की चर्चाओं के साथ जोड़ता है, सबसे टिकाऊ ढांचा माना जा रहा है।",
+      "q_en": "According to the passage, what is considered the most sustainable model for modern education?",
+      "q_hi": "गद्यांश के अनुसार, आधुनिक शिक्षा के लिए सबसे टिकाऊ मॉडल किसे माना गया है?",
+      "options_en": ["Purely online video courses", "Blended learning model", "Traditional rote lecturing", "Exclusively textbook learning"],
+      "options_hi": ["केवल ऑनलाइन वीडियो पाठ्यक्रम", "मिश्रित अधिगम (Blended learning) मॉडल", "पारंपरिक रटंत व्याख्यान", "विशेष रूप से पाठ्यपुस्तक अधिगम"],
+      "ans": 1,
+      "exp": "The passage explicitly states that blended learning combines digital flexibility with classroom discussions."
+    }
+  ],
+  "7": [
+    {
+      "id": "U7_01",
+      "table_html": "<table border='1' style='width:100%; border-collapse:collapse; margin-bottom:12px; font-size:0.85rem; text-align:center;'><thead><tr style='background:#f1f5f9;'><th>Year</th><th>Science</th><th>Arts</th><th>Commerce</th></tr></thead><tbody><tr><td>2021</td><td>120</td><td>150</td><td>80</td></tr><tr><td>2022</td><td>140</td><td>160</td><td>100</td></tr><tr><td>2023</td><td>180</td><td>140</td><td>120</td></tr></tbody></table>",
+      "q_en": "Based on the table above, what is the percentage increase in Science students from 2021 to 2023?",
+      "q_hi": "उपरोक्त तालिका के आधार पर, 2021 से 2023 तक विज्ञान के छात्रों में कितने प्रतिशत की वृद्धि हुई?",
+      "options_en": ["50%", "40%", "33.3%", "60%"],
+      "options_hi": ["50%", "40%", "33.3%", "60%"],
+      "ans": 0,
+      "exp": "Science in 2021 = 120. In 2023 = 180. Increase = 180 - 120 = 60. Percentage = (60 / 120) * 100 = 50%."
+    }
+  ]
+}
