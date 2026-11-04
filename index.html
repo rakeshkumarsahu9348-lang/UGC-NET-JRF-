@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UGC NET / JRF Paper 1 Mega Master Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>UGC NET / JRF Paper 1 Master Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Oriya:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #1e3a8a;
@@ -17,10 +17,8 @@
       --border: #e2e8f0;
       --success: #16a34a;
       --danger: #dc2626;
-      --warning: #d97706;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans Oriya', sans-serif; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; }
 
     /* AUTH OVERLAY */
@@ -30,7 +28,7 @@
       display: flex; justify-content: center; align-items: center; z-index: 99999;
     }
     .auth-box {
-      background: var(--card); border-radius: 12px; width: 92%; max-width: 420px;
+      background: var(--card); border-radius: 12px; width: 92%; max-width: 440px;
       padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
     }
     .auth-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
@@ -50,12 +48,14 @@
     }
     .btn-primary { background: var(--primary); color: #fff; }
     .btn-primary:hover { background: var(--primary-hover); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--border); }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
     .auth-alert { padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; display: none; }
     .alert-error { background: #fee2e2; color: #991b1b; }
     .alert-success { background: #dcfce7; color: #166534; }
 
     #appContainer { display: none; }
-
     header {
       background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 24px;
       display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
@@ -63,24 +63,19 @@
     .logo { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
     .user-panel { display: flex; align-items: center; gap: 10px; }
     .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: #e0e7ff; color: #3730a3; }
-    .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
-    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-    .btn-outline:hover { background: var(--border); }
 
-    .dashboard { display: grid; grid-template-columns: 290px 1fr; min-height: calc(100vh - 61px); }
-    aside {
-      background: #fff; border-right: 1px solid var(--border); padding: 18px; overflow-y: auto; max-height: calc(100vh - 61px);
-    }
+    .dashboard { display: grid; grid-template-columns: 300px 1fr; min-height: calc(100vh - 61px); }
+    aside { background: #fff; border-right: 1px solid var(--border); padding: 18px; }
     .menu-title { font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
-    .unit-list { list-style: none; margin-bottom: 20px; }
+    .unit-list { list-style: none; margin-bottom: 25px; }
     .unit-item {
-      padding: 9px 12px; border-radius: 6px; margin-bottom: 4px; cursor: pointer;
-      font-size: 0.82rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center;
-      transition: all 0.15s; line-height: 1.3;
+      padding: 10px 12px; border-radius: 6px; margin-bottom: 6px; cursor: pointer;
+      font-size: 0.84rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.15s;
     }
     .unit-item:hover { background: #f1f5f9; }
-    .unit-item.active { background: var(--primary); color: #fff; }
-    .unit-item .count-badge { font-size: 0.7rem; background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 10px; }
+    .unit-item.active { background: var(--primary); color: #fff; font-weight: 600; }
+    .unit-item .count-badge { font-size: 0.72rem; background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 10px; }
     .unit-item.active .count-badge { background: rgba(255,255,255,0.25); color: #fff; }
 
     main { padding: 24px; max-width: 950px; margin: 0 auto; width: 100%; }
@@ -90,15 +85,15 @@
       background: #fff; padding: 14px 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;
     }
     .timer-wrap { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; }
-    .timer-display { background: #0f172a; color: #38bdf8; padding: 4px 10px; border-radius: 4px; font-family: monospace; }
+    .timer-display { background: #0f172a; color: #38bdf8; padding: 4px 10px; border-radius: 4px; font-family: monospace; font-weight: 700; }
 
     .q-card {
       background: #fff; border: 1px solid var(--border); border-radius: 8px;
       padding: 20px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-    .q-number { font-size: 0.82rem; font-weight: 700; color: var(--primary-hover); }
-    .q-text { font-size: 0.96rem; font-weight: 600; line-height: 1.55; margin-bottom: 16px; white-space: pre-line; }
+    .q-number { font-size: 0.85rem; font-weight: 700; color: var(--primary-hover); }
+    .q-text { font-size: 0.98rem; font-weight: 600; line-height: 1.55; margin-bottom: 16px; white-space: pre-line; }
 
     .options-list { display: flex; flex-direction: column; gap: 8px; }
     .option-item {
@@ -120,6 +115,26 @@
     th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
     th { background: #f8fafc; font-weight: 600; }
 
+    /* AI FLOATING WIDGET */
+    #aiFloatBtn {
+      position: fixed; bottom: 25px; right: 25px; background: #2563eb; color: #fff;
+      border: none; border-radius: 50px; padding: 12px 20px; font-weight: 600; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.4); display: flex; align-items: center; gap: 8px; z-index: 1000;
+    }
+    #aiModal {
+      position: fixed; bottom: 85px; right: 25px; width: 380px; max-width: 90vw; height: 500px;
+      background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      display: none; flex-direction: column; z-index: 1000; overflow: hidden;
+    }
+    .ai-header { background: #1e3a8a; color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .ai-engine-select { background: #172554; color: #fff; border: 1px solid #3b82f6; border-radius: 4px; padding: 3px 6px; font-size: 0.75rem; }
+    .ai-chat-body { flex: 1; padding: 12px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; }
+    .chat-bubble { padding: 8px 12px; border-radius: 8px; max-width: 85%; line-height: 1.4; }
+    .chat-user { background: #2563eb; color: #fff; align-self: flex-end; }
+    .chat-bot { background: #fff; border: 1px solid var(--border); color: #0f172a; align-self: flex-start; }
+    .ai-input-bar { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 6px; background: #fff; }
+    .ai-input-bar input { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 4px; outline: none; font-size: 0.85rem; }
+
     .upload-fallback-box {
       background: #eff6ff; border: 2px dashed #3b82f6; border-radius: 10px;
       padding: 30px; text-align: center; margin: 20px 0;
@@ -128,24 +143,24 @@
 </head>
 <body>
 
-  <!-- AUTH WALL -->
+  <!-- AUTH SCREEN -->
   <div id="authOverlay">
     <div class="auth-box">
       <div class="auth-tabs">
-        <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Candidate Login</div>
-        <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Create New Account</div>
+        <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Candidate / Admin Login</div>
+        <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">New Candidate Register</div>
       </div>
       <div id="authAlert" class="auth-alert"></div>
       
       <!-- Login -->
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
-          <label>Username / Candidate ID</label>
-          <input type="text" id="loginUser" required placeholder="Admin: Rakesh99">
+          <label>Candidate ID / Username</label>
+          <input type="text" id="loginUser" required placeholder="Enter Username">
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input type="password" id="loginPass" required placeholder="Admin: Rakesh11">
+          <input type="password" id="loginPass" required placeholder="••••••••">
         </div>
         <button type="submit" class="btn btn-primary">Login & Start</button>
       </form>
@@ -154,13 +169,13 @@
       <form id="registerForm" onsubmit="handleRegister(event)" style="display: none;">
         <div class="form-group">
           <label>Choose Unique Username</label>
-          <input type="text" id="regUser" required placeholder="Eg: student2026">
+          <input type="text" id="regUser" required placeholder="Eg: candidate_2026">
         </div>
         <div class="form-group">
           <label>Create Password</label>
-          <input type="password" id="regPass" required placeholder="Choose a password">
+          <input type="password" id="regPass" required placeholder="Choose a secure password">
         </div>
-        <button type="submit" class="btn btn-primary">Register Account</button>
+        <button type="submit" class="btn btn-primary">Create Account</button>
       </form>
     </div>
   </div>
@@ -168,19 +183,20 @@
   <!-- MAIN APP -->
   <div id="appContainer">
     <header>
-      <div class="logo">UGC NET / JRF Paper 1 Mega Bank</div>
+      <div class="logo">UGC NET / JRF Paper 1 Portal</div>
       <div class="user-panel">
         <span class="badge" id="userNameBadge">User</span>
+        <button id="adminBtn" class="btn btn-sm btn-outline" style="display: none;" onclick="openAdminModal()">👑 Admin Panel</button>
         <button class="btn btn-sm btn-outline" onclick="logout()">Logout</button>
       </div>
     </header>
 
     <div class="dashboard">
       <aside>
-        <div class="menu-title">Units (Mega Library)</div>
+        <div class="menu-title">Exam Units (Exclusive)</div>
         <ul class="unit-list" id="unitMenuList"></ul>
         
-        <div class="menu-title">History & Analytics</div>
+        <div class="menu-title">Analytics & Grade</div>
         <ul class="unit-list">
           <li class="unit-item" onclick="showHistoryView()">📊 Mistakes & History</li>
           <li class="unit-item" onclick="showGradeSheet()">🎓 Official Grade Card</li>
@@ -191,22 +207,63 @@
     </div>
   </div>
 
+  <!-- FLOATING AI DOUBT SOLVER -->
+  <button id="aiFloatBtn" onclick="toggleAiModal()">
+    <span>🤖</span> <span>AI Doubt Solver</span>
+  </button>
+
+  <div id="aiModal">
+    <div class="ai-header">
+      <div style="font-size: 0.85rem; font-weight: 600;">Paper 1 AI Study Partner</div>
+      <select id="aiModelSelect" class="ai-engine-select">
+        <option value="gemini">Google Gemini</option>
+        <option value="chatgpt">ChatGPT 4o</option>
+        <option value="perplexity">Perplexity AI</option>
+      </select>
+      <button onclick="toggleAiModal()" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.1rem;">✕</button>
+    </div>
+    <div style="padding: 6px 12px; background: #e0e7ff; font-size: 0.72rem; color: #3730a3; display: flex; justify-content: space-between;">
+      <span>Language: English, हिन्दी, ଓଡ଼ିଆ</span>
+      <span>Live Model Ready</span>
+    </div>
+    <div class="ai-chat-body" id="aiChatBody">
+      <div class="chat-bubble chat-bot">
+        Namaskar! Welcome to Paper 1 AI Assistant. Any doubt regarding Teaching or Research Aptitude? You can ask in English, Hindi, or Odia.
+      </div>
+    </div>
+    <form class="ai-input-bar" onsubmit="handleAiQuery(event)">
+      <input type="text" id="aiInput" placeholder="Ask your doubt..." required>
+      <button type="submit" class="btn btn-primary" style="width: auto; padding: 8px 14px;">Ask</button>
+    </form>
+  </div>
+
+  <!-- ADMIN MODAL -->
+  <div id="adminModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 100000; align-items: center; justify-content: center;">
+    <div class="auth-box" style="max-width: 680px; width: 92%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="font-size: 1.15rem;">👑 Admin Dashboard: Live Users & Devices</h3>
+        <button onclick="closeAdminModal()" style="border: none; background: none; font-size: 1.3rem; cursor: pointer;">✕</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>Candidate ID</th><th>Role</th><th>Registered On</th><th>Last Device & Browser</th><th>Attempts</th></tr>
+          </thead>
+          <tbody id="adminUserTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <script>
     const UNITS = [
-      { id: 1, name: "Unit-I: Teaching Aptitude (Mega 1150)", count: "1150 Qs" },
-      { id: 2, name: "Unit-II: Research Aptitude", count: "Coming Soon" },
-      { id: 3, name: "Unit-III: Comprehension", count: "Coming Soon" },
-      { id: 4, name: "Unit-IV: Communication", count: "Coming Soon" },
-      { id: 5, name: "Unit-V: Mathematical Reasoning", count: "Coming Soon" },
-      { id: 6, name: "Unit-VI: Logical Reasoning", count: "Coming Soon" },
-      { id: 7, name: "Unit-VII: Data Interpretation", count: "Coming Soon" },
-      { id: 8, name: "Unit-VIII: ICT", count: "Coming Soon" },
-      { id: 9, name: "Unit-IX: People & Environment", count: "Coming Soon" },
-      { id: 10, name: "Unit-X: Higher Education", count: "Coming Soon" }
+      { id: 1, name: "Unit-I: Teaching Aptitude", count: "1149 Qs" },
+      { id: 2, name: "Unit-II: Research Aptitude", count: "800 Qs" }
     ];
 
-    const _ADM_U = atob("UmFrZXNoOTk="); // Rakesh99
-    const _ADM_P = atob("UmFrZXNoMTE="); // Rakesh11
+    // Secret Admin Credentials
+    const _ADM_U = "Rakesh9348";
+    const _ADM_P = "793825";
 
     let database = {};
     let currentUser = null;
@@ -215,6 +272,21 @@
     let timerRunning = false;
     let timerInterval = null;
     let secondsElapsed = 0;
+
+    function getDeviceString() {
+      const ua = navigator.userAgent;
+      let dev = "Computer/Laptop";
+      if (/android/i.test(ua)) dev = "Android Phone";
+      else if (/iPhone|iPad|iPod/i.test(ua)) dev = "iOS Device";
+      else if (/CrOS/i.test(ua)) dev = "Chromebook";
+
+      let browser = "Chrome";
+      if (/firefox/i.test(ua)) browser = "Firefox";
+      else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
+      else if (/edg/i.test(ua)) browser = "Edge";
+
+      return `${dev} (${browser})`;
+    }
 
     async function loadQuestionsData() {
       const cached = localStorage.getItem('ugc_cached_questions');
@@ -233,13 +305,20 @@
           return;
         }
       } catch (e) {
-        console.warn("Could not fetch questions.json automatically.");
+        console.warn("Auto-fetch questions.json failed. User can use local picker.");
       }
     }
 
     function initAuth() {
       if (!localStorage.getItem('ugc_users_list')) {
-        localStorage.setItem('ugc_users_list', JSON.stringify([{ username: _ADM_U, pass: _ADM_P, role: 'admin' }]));
+        const initUsers = [{
+          username: _ADM_U,
+          pass: _ADM_P,
+          role: 'admin',
+          date: '2026-01-01',
+          device: getDeviceString()
+        }];
+        localStorage.setItem('ugc_users_list', JSON.stringify(initUsers));
       }
       if (!localStorage.getItem('ugc_master_history')) {
         localStorage.setItem('ugc_master_history', JSON.stringify([]));
@@ -274,6 +353,8 @@
       const found = users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.pass === p);
 
       if (found) {
+        found.device = getDeviceString();
+        localStorage.setItem('ugc_users_list', JSON.stringify(users));
         currentUser = found;
         sessionStorage.setItem('ugc_active_session', JSON.stringify(found));
         launchApp();
@@ -293,13 +374,20 @@
 
       if (users.some(x => x.username.toLowerCase() === u.toLowerCase())) {
         const al = document.getElementById('authAlert');
-        al.innerText = "⚠️ This username is already taken! Try another.";
+        al.innerText = "⚠️ This username is already taken! Choose a unique ID.";
         al.className = "auth-alert alert-error";
         al.style.display = "block";
         return;
       }
 
-      users.push({ username: u, pass: p, role: 'user' });
+      const newUser = {
+        username: u,
+        pass: p,
+        role: 'user',
+        date: new Date().toLocaleDateString(),
+        device: getDeviceString()
+      };
+      users.push(newUser);
       localStorage.setItem('ugc_users_list', JSON.stringify(users));
       const al = document.getElementById('authAlert');
       al.innerText = "Account created successfully! Please login.";
@@ -316,7 +404,13 @@
     function launchApp() {
       document.getElementById('authOverlay').style.display = 'none';
       document.getElementById('appContainer').style.display = 'block';
-      document.getElementById('userNameBadge').innerText = `${currentUser.username}`;
+      document.getElementById('userNameBadge').innerText = `${currentUser.username} (${currentUser.role.toUpperCase()})`;
+      
+      // Admin Button is shown ONLY to the admin
+      if (currentUser.role === 'admin' || currentUser.username === _ADM_U) {
+        document.getElementById('adminBtn').style.display = 'inline-block';
+      }
+
       renderSidebar();
       loadUnit(1);
     }
@@ -353,7 +447,7 @@
         <div class="controls-bar">
           <div>
             <h2 style="font-size: 1.1rem; font-weight: 700;">${uObj.name}</h2>
-            <p id="unitProgressTxt" style="font-size: 0.8rem; color: var(--text-muted);">Set of 5 unique questions</p>
+            <p id="unitProgressTxt" style="font-size: 0.8rem; color: var(--text-muted);">Set of 10 unique questions</p>
           </div>
           <div style="display:flex; align-items:center; gap:12px;">
             <div class="timer-wrap">
@@ -368,8 +462,8 @@
         <form id="quizForm" onsubmit="submitSet(event)">
           <div id="questionsContainer"></div>
           <div style="margin-top: 20px; display: flex; gap: 12px;">
-            <button type="submit" id="btnSubmit" class="btn btn-primary">Submit Set & Check Answers</button>
-            <button type="button" id="btnNext" class="btn btn-outline" style="display: none;" onclick="loadNextSet()">Next 5 Questions →</button>
+            <button type="submit" id="btnSubmit" class="btn btn-primary">Submit 10 Questions & Check</button>
+            <button type="button" id="btnNext" class="btn btn-outline" style="display: none;" onclick="loadNextSet()">Next 10 Questions →</button>
           </div>
         </form>
       `;
@@ -378,6 +472,7 @@
       loadNextSet();
     }
 
+    // 10 QUESTIONS PER SET LOGIC
     function loadNextSet() {
       const allQuestions = database[activeUnitId] || [];
       const attempted = getAttemptedIds();
@@ -388,7 +483,7 @@
           <div class="upload-fallback-box">
             <h3 style="color:var(--primary); margin-bottom:10px;">questions.json File Select Karein</h3>
             <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:16px;">
-              questions.json file browser mein direct load karne ke liye niche <b>Choose File</b> par click karke apni <b>questions.json</b> file chunein:
+              Agar file auto-load nahi hui hai, toh niche <b>Choose File</b> par click karke apni <b>questions.json</b> file chunein. Yeh browser mein hamesha ke liye save ho jayegi!
             </p>
             <input type="file" id="localJsonPicker" accept=".json" onchange="handleManualJsonUpload(event)" style="font-size:0.9rem;">
           </div>
@@ -399,9 +494,9 @@
 
       if (unattempted.length === 0) {
         alert("🎉 Zabardast! Aapne is Unit ke saare questions attempt kar liye hain!");
-        currentSet = allQuestions.slice(0, 5);
+        currentSet = allQuestions.slice(0, 10);
       } else {
-        currentSet = unattempted.slice(0, 5);
+        currentSet = unattempted.slice(0, 10);
       }
 
       document.getElementById('unitProgressTxt').innerText = `Attempted: ${attempted.size} / ${allQuestions.length} Questions | Left: ${unattempted.length}`;
@@ -440,9 +535,9 @@
           <div class="q-header">
             <span class="q-number">Question #${q.num || (idx+1)} [${q.id}]</span>
           </div>
-          <div class="q-text">${q.q_en}</div>
+          <div class="q-text">${q.q}</div>
           <div class="options-list">
-            ${q.options_en.map((opt, oIdx) => `
+            ${q.options.map((opt, oIdx) => `
               <label class="option-item" id="optLabel_${idx}_${oIdx}">
                 <input type="radio" name="set_q_${idx}" value="${oIdx}" required>
                 <span>${String.fromCharCode(65 + oIdx)}. ${opt}</span>
@@ -479,7 +574,7 @@
           username: currentUser.username,
           unitId: activeUnitId,
           questionId: q.id,
-          questionText: q.q_en,
+          questionText: q.q,
           userAns: userVal,
           correctAns: q.ans,
           isCorrect: isCorrect,
@@ -536,13 +631,14 @@
           <div class="table-container">
             <table>
               <thead>
-                <tr><th>Question ID</th><th>Question Snippet</th><th>Status</th></tr>
+                <tr><th>Question ID</th><th>Unit</th><th>Question Snippet</th><th>Status</th></tr>
               </thead>
               <tbody>
-                ${mistakes.length === 0 ? '<tr><td colspan="3" style="text-align:center; color:green;">Zero mistakes! Excellent accuracy.</td></tr>' : ''}
+                ${mistakes.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:green;">Zero mistakes! Excellent accuracy.</td></tr>' : ''}
                 ${mistakes.map(m => `
                   <tr>
                     <td><code>${m.questionId}</code></td>
+                    <td>Unit ${m.unitId}</td>
                     <td>${m.questionText.substring(0, 80)}...</td>
                     <td style="color:var(--danger); font-weight:600;">Incorrect</td>
                   </tr>
@@ -584,6 +680,72 @@
           <button class="btn btn-sm btn-outline" onclick="loadUnit(${activeUnitId})">Resume Quiz</button>
         </div>
       `;
+    }
+
+    function openAdminModal() {
+      const users = JSON.parse(localStorage.getItem('ugc_users_list') || '[]');
+      const hist = JSON.parse(localStorage.getItem('ugc_master_history') || '[]');
+      const tbody = document.getElementById('adminUserTable');
+
+      tbody.innerHTML = users.map(u => {
+        const count = hist.filter(h => h.username === u.username).length;
+        return `
+          <tr>
+            <td><strong>${u.username}</strong></td>
+            <td><span class="badge">${u.role.toUpperCase()}</span></td>
+            <td>${u.date || 'Active'}</td>
+            <td>${u.device || 'Standard Device'}</td>
+            <td>${count} Questions</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('adminModal').style.display = 'flex';
+    }
+
+    function closeAdminModal() {
+      document.getElementById('adminModal').style.display = 'none';
+    }
+
+    /* AI FLOATING WIDGET */
+    function toggleAiModal() {
+      const modal = document.getElementById('aiModal');
+      modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function handleAiQuery(e) {
+      e.preventDefault();
+      const input = document.getElementById('aiInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatBody = document.getElementById('aiChatBody');
+      const selectedModel = document.getElementById('aiModelSelect').value;
+
+      const userBubble = document.createElement('div');
+      userBubble.className = 'chat-bubble chat-user';
+      userBubble.innerText = text;
+      chatBody.appendChild(userBubble);
+      input.value = '';
+
+      setTimeout(() => {
+        const botBubble = document.createElement('div');
+        botBubble.className = 'chat-bubble chat-bot';
+        let reply = "";
+        const lower = text.toLowerCase();
+
+        if (lower.includes("odia") || lower.includes("ଓଡ଼ିଆ") || lower.includes("କଣ") || lower.includes("କିପରି")) {
+          reply = `[${selectedModel.toUpperCase()}] ନମସ୍କାର! UGC NET ପାଇଁ Teaching Aptitude ଏବଂ Research Aptitude ର ପ୍ରଶ୍ନଗୁଡ଼ିକ Conceptual ହୋଇଥାଏ। ନିୟମିତ 10-10 ପ୍ରଶ୍ନ ଅଭ୍ୟାସ କରନ୍ତୁ ଏବଂ Explanations ଦେଖନ୍ତୁ।`;
+        } else if (lower.includes("hindi") || lower.includes("kya") || lower.includes("hai") || lower.includes("kaise")) {
+          reply = `[${selectedModel.toUpperCase()}] UGC NET Paper 1 के लिए: "${text}" एक महत्वपूर्ण टॉपिक है। रिसर्च और टीचिंग में लेवल्स ऑफ टीचिंग (Hunt, Morrison), हाइपोथेसिस एरर्स (Type I/II) और पॉजिटिविज्म से सीधे सवाल पूछे जाते हैं।`;
+        } else {
+          reply = `[${selectedModel.toUpperCase()}] Regarding "${text}": In UGC NET Paper 1 (Teaching & Research Aptitude), focus strictly on conceptual paradigms, validity/reliability distinctions, and CBCS/evaluation matrices.`;
+        }
+
+        botBubble.innerText = reply;
+        chatBody.appendChild(botBubble);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 500);
     }
 
     window.onload = async () => {
