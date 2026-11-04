@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UGC NET / JRF Paper 1 Master Portal</title>
+  <title>UGC NET / JRF Paper 1 Mega Master Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #1e3a8a;
       --primary-hover: #2563eb;
+      --secondary: #0d9488;
       --bg: #f8fafc;
       --card: #ffffff;
       --text: #0f172a;
@@ -16,11 +17,13 @@
       --border: #e2e8f0;
       --success: #16a34a;
       --danger: #dc2626;
+      --warning: #d97706;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* AUTH SHIELD */
+    /* AUTH OVERLAY */
     #authOverlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.96); backdrop-filter: blur(8px);
@@ -40,6 +43,7 @@
     .form-group input {
       width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; outline: none;
     }
+    .form-group input:focus { border-color: var(--primary-hover); }
     .btn {
       display: inline-block; width: 100%; padding: 11px; font-weight: 600; text-align: center;
       border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem;
@@ -51,32 +55,50 @@
     .alert-success { background: #dcfce7; color: #166534; }
 
     #appContainer { display: none; }
+
     header {
       background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 24px;
       display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
     }
     .logo { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+    .user-panel { display: flex; align-items: center; gap: 10px; }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: #e0e7ff; color: #3730a3; }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--border); }
+
     .dashboard { display: grid; grid-template-columns: 290px 1fr; min-height: calc(100vh - 61px); }
-    aside { background: #fff; border-right: 1px solid var(--border); padding: 18px; }
-    .unit-item {
-      padding: 10px 12px; border-radius: 6px; margin-bottom: 6px; cursor: pointer;
-      font-size: 0.85rem; font-weight: 600; background: var(--primary); color: #fff;
+    aside {
+      background: #fff; border-right: 1px solid var(--border); padding: 18px; overflow-y: auto; max-height: calc(100vh - 61px);
     }
+    .menu-title { font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+    .unit-list { list-style: none; margin-bottom: 20px; }
+    .unit-item {
+      padding: 9px 12px; border-radius: 6px; margin-bottom: 4px; cursor: pointer;
+      font-size: 0.82rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.15s; line-height: 1.3;
+    }
+    .unit-item:hover { background: #f1f5f9; }
+    .unit-item.active { background: var(--primary); color: #fff; }
+    .unit-item .count-badge { font-size: 0.7rem; background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 10px; }
+    .unit-item.active .count-badge { background: rgba(255,255,255,0.25); color: #fff; }
+
     main { padding: 24px; max-width: 950px; margin: 0 auto; width: 100%; }
 
     .controls-bar {
-      display: flex; justify-content: space-between; align-items: center;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
       background: #fff; padding: 14px 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;
     }
-    .timer-display { background: #0f172a; color: #38bdf8; padding: 4px 10px; border-radius: 4px; font-family: monospace; font-weight: 700; }
+    .timer-wrap { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; }
+    .timer-display { background: #0f172a; color: #38bdf8; padding: 4px 10px; border-radius: 4px; font-family: monospace; }
 
     .q-card {
       background: #fff; border: 1px solid var(--border); border-radius: 8px;
       padding: 20px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
-    .q-header { margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-    .q-number { font-size: 0.85rem; font-weight: 700; color: var(--primary-hover); }
-    .q-text { font-size: 0.98rem; font-weight: 600; line-height: 1.55; margin-bottom: 16px; }
+    .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    .q-number { font-size: 0.82rem; font-weight: 700; color: var(--primary-hover); }
+    .q-text { font-size: 0.96rem; font-weight: 600; line-height: 1.55; margin-bottom: 16px; white-space: pre-line; }
 
     .options-list { display: flex; flex-direction: column; gap: 8px; }
     .option-item {
@@ -91,43 +113,54 @@
       margin-top: 14px; padding: 12px; background: #f0fdf4; border-left: 4px solid var(--success);
       font-size: 0.86rem; border-radius: 0 6px 6px 0; display: none; line-height: 1.5;
     }
+
+    .view-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
+    .table-container { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+    th { background: #f8fafc; font-weight: 600; }
+
+    .upload-fallback-box {
+      background: #eff6ff; border: 2px dashed #3b82f6; border-radius: 10px;
+      padding: 30px; text-align: center; margin: 20px 0;
+    }
   </style>
 </head>
 <body>
 
-  <!-- AUTH SCREEN -->
+  <!-- AUTH WALL -->
   <div id="authOverlay">
     <div class="auth-box">
       <div class="auth-tabs">
         <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Candidate Login</div>
-        <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">New Register</div>
+        <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Create New Account</div>
       </div>
       <div id="authAlert" class="auth-alert"></div>
       
       <!-- Login -->
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
-          <label>Candidate ID</label>
+          <label>Username / Candidate ID</label>
           <input type="text" id="loginUser" required placeholder="Admin: Rakesh99">
         </div>
         <div class="form-group">
           <label>Password</label>
           <input type="password" id="loginPass" required placeholder="Admin: Rakesh11">
         </div>
-        <button type="submit" class="btn btn-primary">Login & Practice</button>
+        <button type="submit" class="btn btn-primary">Login & Start</button>
       </form>
 
       <!-- Register -->
       <form id="registerForm" onsubmit="handleRegister(event)" style="display: none;">
         <div class="form-group">
-          <label>Unique Username</label>
-          <input type="text" id="regUser" required placeholder="Choose your ID">
+          <label>Choose Unique Username</label>
+          <input type="text" id="regUser" required placeholder="Eg: student2026">
         </div>
         <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="regPass" required placeholder="Choose password">
+          <label>Create Password</label>
+          <input type="password" id="regPass" required placeholder="Choose a password">
         </div>
-        <button type="submit" class="btn btn-primary">Create Account</button>
+        <button type="submit" class="btn btn-primary">Register Account</button>
       </form>
     </div>
   </div>
@@ -135,182 +168,81 @@
   <!-- MAIN APP -->
   <div id="appContainer">
     <header>
-      <div class="logo">UGC NET / JRF Paper 1 Portal</div>
-      <div>
-        <span id="userNameBadge" style="font-weight: 600; margin-right: 15px;">User</span>
-        <button class="btn btn-primary" style="width: auto; padding: 6px 12px;" onclick="logout()">Logout</button>
+      <div class="logo">UGC NET / JRF Paper 1 Mega Bank</div>
+      <div class="user-panel">
+        <span class="badge" id="userNameBadge">User</span>
+        <button class="btn btn-sm btn-outline" onclick="logout()">Logout</button>
       </div>
     </header>
 
     <div class="dashboard">
       <aside>
-        <div class="unit-item">Unit-I: Teaching Aptitude (PDF Bank)</div>
+        <div class="menu-title">Units (Mega Library)</div>
+        <ul class="unit-list" id="unitMenuList"></ul>
+        
+        <div class="menu-title">History & Analytics</div>
+        <ul class="unit-list">
+          <li class="unit-item" onclick="showHistoryView()">📊 Mistakes & History</li>
+          <li class="unit-item" onclick="showGradeSheet()">🎓 Official Grade Card</li>
+        </ul>
       </aside>
 
-      <main>
-        <div class="controls-bar">
-          <div>
-            <h2 style="font-size: 1.1rem; font-weight: 700;">Unit 1: Teaching Aptitude</h2>
-            <p id="unitProgressTxt" style="font-size: 0.8rem; color: var(--text-muted);">Set of 5 unique questions</p>
-          </div>
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span>⏱️ Timer:</span>
-            <span class="timer-display" id="timerBox">00:00</span>
-          </div>
-        </div>
-
-        <form id="quizForm" onsubmit="submitSet(event)">
-          <div id="questionsContainer"></div>
-          <div style="margin-top: 20px; display: flex; gap: 12px;">
-            <button type="submit" id="btnSubmit" class="btn btn-primary">Submit Set & Check Answers</button>
-            <button type="button" id="btnNext" class="btn btn-primary" style="display: none; background: #0f172a;" onclick="loadNextSet()">Next 5 Questions →</button>
-          </div>
-        </form>
-      </main>
+      <main id="mainWorkspace"></main>
     </div>
   </div>
 
   <script>
-    // Authentic PDF Questions Direct Embed
-    const EMBEDDED_QUESTIONS = [
-      {
-        id: "U1_Q001",
-        q: "Which level of teaching is primarily thoughtless and relies strictly on stimulus-response conditioning and memorization?",
-        options: ["Reflective Level", "Understanding Level", "Memory Level", "Autonomous Development Level"],
-        ans: 2,
-        exp: "Memory level (Herbartian model) is the lowest level of teaching where factual retention, rote learning, and recall are prioritized without deep comprehension."
-      },
-      {
-        id: "U1_Q002",
-        q: "In which level of teaching does the teacher strive to help learners see relationships between principles and isolated facts?",
-        options: ["Memory Level", "Understanding Level", "Reflective Level", "Conditioned Level"],
-        ans: 1,
-        exp: "Morrison’s Understanding level focuses on grasping concepts, general principles, rule applications, and recognizing patterns among facts."
-      },
-      {
-        id: "U1_Q003",
-        q: "The reflective level of teaching propounded by Hunt requires a classroom climate that is:",
-        options: ["Authoritarian and rigid", "Laissez-faire without guidance", "Democratic, open, and problem-oriented", "Dominated purely by teacher talk"],
-        ans: 2,
-        exp: "Reflective teaching demands an open, inquiring, democratic atmosphere where learners feel free to investigate real problems and hypothesize solutions."
-      },
-      {
-        id: "U1_Q004",
-        q: "Which of the following sequence represents Morrison's five steps of Understanding Level Teaching?",
-        options: [
-          "Exploration → Presentation → Assimilation → Organization → Recitation",
-          "Preparation → Presentation → Association → Generalization → Application",
-          "Planning → Execution → Reflection → Revision → Assessment",
-          "Orientation → Feedback → Reinforcement → Testing → Remediation"
-        ],
-        ans: 0,
-        exp: "Morrison established these five explicit pedagogical cycles: Exploration, Presentation, Assimilation, Organization, and Recitation."
-      },
-      {
-        id: "U1_Q005",
-        q: "According to Gagne’s hierarchy of learning, which condition represents the highest cognitive level of learning?",
-        options: ["Rule learning", "Concept learning", "Problem-solving", "Principle learning"],
-        ans: 2,
-        exp: "In Gagné's 8-stage hierarchy, problem solving is the apex, relying upon the prerequisite mastery of concepts and rules."
-      },
-      {
-        id: "U1_Q006",
-        q: "What is the fundamental difference between Pedagogy and Andragogy?",
-        options: [
-          "Pedagogy is learner-led; Andragogy is instructor-led",
-          "Pedagogy is child-centric; Andragogy is adult-centric and self-directed",
-          "Pedagogy involves higher education; Andragogy involves primary schools",
-          "Andragogy relies purely on external punishment"
-        ],
-        ans: 1,
-        exp: "Malcolm Knowles defined Andragogy as the art and science of helping adults learn, characterized by self-concept, experiential focus, and internal motivation."
-      },
-      {
-        id: "U1_Q007",
-        q: "In Heutagogy, the learning is described as:",
-        options: ["Teacher-directed learning", "Self-determined learning", "Machine-directed instruction", "Passive observation"],
-        ans: 1,
-        exp: "Formulated by Hase and Kenyon, Heutagogy extends andragogy into true self-determined learning where learners negotiate both curriculum and assessment."
-      },
-      {
-        id: "U1_Q008",
-        q: "In teaching, the term \"Scaffolding\" is grounded in the theoretical framework of:",
-        options: ["B.F. Skinner's Operant Conditioning", "Lev Vygotsky's Socio-cultural Theory", "Edward Thorndike's Connectionism", "Ivan Pavlov's Classical Conditioning"],
-        ans: 1,
-        exp: "Scaffolding works within Vygotsky’s Zone of Proximal Development (ZPD), providing temporary expert structure until learner self-reliance is achieved."
-      },
-      {
-        id: "U1_Q009",
-        q: "Formative evaluation differs primarily from summative evaluation because it:",
-        options: [
-          "Occurs at the termination of the semester to certify grades",
-          "Provides real-time feedback during instructional delivery to diagnose gaps",
-          "Assesses statewide standardized merit lists exclusively",
-          "Is conducted only by external university examiners"
-        ],
-        ans: 1,
-        exp: "Formative evaluation takes place continuously 'for learning' to guide pedagogical adjustments, whereas summative evaluation judges the cumulative product 'of learning'."
-      },
-      {
-        id: "U1_Q010",
-        q: "When an evaluation assesses whether a candidate possesses the required prerequisite skills before entering a program, it is:",
-        options: ["Placement Evaluation", "Summative Evaluation", "Ipsative Evaluation", "Diagnostic Evaluation"],
-        ans: 0,
-        exp: "Placement evaluation determines entry behaviors, foundational competencies, and appropriate placement within a curricular stream."
-      },
-      {
-        id: "U1_Q011",
-        q: "In the revised Bloom's taxonomy (Anderson & Krathwohl, 2001), what order of cognitive skills is correct from lowest to highest?",
-        options: [
-          "Remembering → Understanding → Applying → Analyzing → Evaluating → Creating",
-          "Remembering → Applying → Understanding → Evaluating → Analyzing → Creating",
-          "Understanding → Remembering → Applying → Evaluating → Analyzing → Creating",
-          "Knowledge → Comprehension → Application → Analysis → Synthesis → Evaluation"
-        ],
-        ans: 0,
-        exp: "The 2001 taxonomy revised nouns to verbs and elevated Creating above Evaluating as the topmost cognitive operation."
-      },
-      {
-        id: "U1_Q012",
-        q: "A teacher prepares a test where questions strictly match specific behavioral objectives without comparing examinees to each other. This is:",
-        options: ["Norm-Referenced Test", "Criterion-Referenced Test", "Standardized Percentile Test", "Ipsative Curve Test"],
-        ans: 1,
-        exp: "Criterion-Referenced Tests measure mastery against explicit standards rather than ranking students against their peers."
-      },
-      {
-        id: "U1_Q013",
-        q: "Which quadrant of the SWAYAM online education platform handles peer doubt clearance and discussions?",
-        options: ["Quadrant 1 (e-Tutorial)", "Quadrant 2 (e-Content)", "Quadrant 3 (Discussion Forum)", "Quadrant 4 (Assessment)"],
-        ans: 2,
-        exp: "Quadrant 3 is the dedicated asynchronous discussion forum where course coordinators and teaching assistants clarify student questions."
-      },
-      {
-        id: "U1_Q014",
-        q: "Which National Coordinator is tasked with coordinating teacher training programs on the SWAYAM platform?",
-        options: ["NPTEL", "NITTRR", "IIMB", "IGNOU"],
-        ans: 1,
-        exp: "National Institute of Technical Teachers Training and Research (NITTTR) oversees Teacher Training programmes on SWAYAM."
-      },
-      {
-        id: "U1_Q015",
-        q: "Under the Choice Based Credit System (CBCS), what is an 'Elective Course chosen generally from an unrelated discipline' called?",
-        options: ["Discipline Specific Elective (DSE)", "Generic Elective (GE)", "Ability Enhancement Compulsory Course (AECC)", "Core Course (CC)"],
-        ans: 1,
-        exp: "Generic Electives (GE) are interdisciplinary options chosen from other subject pools to foster broad intellectual exposure."
-      }
+    const UNITS = [
+      { id: 1, name: "Unit-I: Teaching Aptitude (Mega 1150)", count: "1150 Qs" },
+      { id: 2, name: "Unit-II: Research Aptitude", count: "Coming Soon" },
+      { id: 3, name: "Unit-III: Comprehension", count: "Coming Soon" },
+      { id: 4, name: "Unit-IV: Communication", count: "Coming Soon" },
+      { id: 5, name: "Unit-V: Mathematical Reasoning", count: "Coming Soon" },
+      { id: 6, name: "Unit-VI: Logical Reasoning", count: "Coming Soon" },
+      { id: 7, name: "Unit-VII: Data Interpretation", count: "Coming Soon" },
+      { id: 8, name: "Unit-VIII: ICT", count: "Coming Soon" },
+      { id: 9, name: "Unit-IX: People & Environment", count: "Coming Soon" },
+      { id: 10, name: "Unit-X: Higher Education", count: "Coming Soon" }
     ];
 
+    const _ADM_U = atob("UmFrZXNoOTk="); // Rakesh99
+    const _ADM_P = atob("UmFrZXNoMTE="); // Rakesh11
+
+    let database = {};
     let currentUser = null;
+    let activeUnitId = 1;
     let currentSet = [];
+    let timerRunning = false;
     let timerInterval = null;
     let secondsElapsed = 0;
 
+    async function loadQuestionsData() {
+      const cached = localStorage.getItem('ugc_cached_questions');
+      if (cached) {
+        try {
+          database = JSON.parse(cached);
+          return;
+        } catch(e) {}
+      }
+
+      try {
+        const res = await fetch('./questions.json');
+        if (res.ok) {
+          database = await res.json();
+          localStorage.setItem('ugc_cached_questions', JSON.stringify(database));
+          return;
+        }
+      } catch (e) {
+        console.warn("Could not fetch questions.json automatically.");
+      }
+    }
+
     function initAuth() {
       if (!localStorage.getItem('ugc_users_list')) {
-        localStorage.setItem('ugc_users_list', JSON.stringify([{ username: 'Rakesh99', pass: 'Rakesh11' }]));
+        localStorage.setItem('ugc_users_list', JSON.stringify([{ username: _ADM_U, pass: _ADM_P, role: 'admin' }]));
       }
-      if (!localStorage.getItem('ugc_history')) {
-        localStorage.setItem('ugc_history', JSON.stringify([]));
+      if (!localStorage.getItem('ugc_master_history')) {
+        localStorage.setItem('ugc_master_history', JSON.stringify([]));
       }
     }
     initAuth();
@@ -361,19 +293,19 @@
 
       if (users.some(x => x.username.toLowerCase() === u.toLowerCase())) {
         const al = document.getElementById('authAlert');
-        al.innerText = "This username is already taken!";
+        al.innerText = "⚠️ This username is already taken! Try another.";
         al.className = "auth-alert alert-error";
         al.style.display = "block";
         return;
       }
 
-      users.push({ username: u, pass: p });
+      users.push({ username: u, pass: p, role: 'user' });
       localStorage.setItem('ugc_users_list', JSON.stringify(users));
       const al = document.getElementById('authAlert');
-      al.innerText = "Account created! Please login.";
+      al.innerText = "Account created successfully! Please login.";
       al.className = "auth-alert alert-success";
       al.style.display = "block";
-      setTimeout(() => switchAuthTab('login'), 1000);
+      setTimeout(() => switchAuthTab('login'), 1200);
     }
 
     function logout() {
@@ -384,33 +316,117 @@
     function launchApp() {
       document.getElementById('authOverlay').style.display = 'none';
       document.getElementById('appContainer').style.display = 'block';
-      document.getElementById('userNameBadge').innerText = currentUser.username;
+      document.getElementById('userNameBadge').innerText = `${currentUser.username}`;
+      renderSidebar();
+      loadUnit(1);
+    }
+
+    function renderSidebar() {
+      const list = document.getElementById('unitMenuList');
+      list.innerHTML = '';
+      UNITS.forEach(u => {
+        const li = document.createElement('li');
+        li.className = `unit-item ${u.id === activeUnitId ? 'active' : ''}`;
+        li.id = `sideUnit_${u.id}`;
+        li.onclick = () => loadUnit(u.id);
+        li.innerHTML = `<span>${u.name}</span><span class="count-badge">${u.count}</span>`;
+        list.appendChild(li);
+      });
+    }
+
+    function getAttemptedIds() {
+      const hist = JSON.parse(localStorage.getItem('ugc_master_history') || '[]');
+      const userHist = hist.filter(h => h.username === currentUser.username && h.unitId === activeUnitId);
+      return new Set(userHist.map(h => h.questionId));
+    }
+
+    function loadUnit(unitId) {
+      activeUnitId = unitId;
+      document.querySelectorAll('#unitMenuList .unit-item').forEach(el => el.classList.remove('active'));
+      const activeEl = document.getElementById(`sideUnit_${unitId}`);
+      if (activeEl) activeEl.classList.add('active');
+
+      const uObj = UNITS.find(x => x.id === unitId);
+      const main = document.getElementById('mainWorkspace');
+
+      main.innerHTML = `
+        <div class="controls-bar">
+          <div>
+            <h2 style="font-size: 1.1rem; font-weight: 700;">${uObj.name}</h2>
+            <p id="unitProgressTxt" style="font-size: 0.8rem; color: var(--text-muted);">Set of 5 unique questions</p>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="timer-wrap">
+              <span>⏱️ Timer:</span>
+              <span class="timer-display" id="timerBox">00:00</span>
+              <button class="btn btn-sm btn-outline" id="timerToggleBtn" onclick="toggleTimer()">Pause</button>
+            </div>
+            <button class="btn btn-sm btn-outline" onclick="resetUnitHistory(${unitId})">↺ Reset Progress</button>
+          </div>
+        </div>
+
+        <form id="quizForm" onsubmit="submitSet(event)">
+          <div id="questionsContainer"></div>
+          <div style="margin-top: 20px; display: flex; gap: 12px;">
+            <button type="submit" id="btnSubmit" class="btn btn-primary">Submit Set & Check Answers</button>
+            <button type="button" id="btnNext" class="btn btn-outline" style="display: none;" onclick="loadNextSet()">Next 5 Questions →</button>
+          </div>
+        </form>
+      `;
+
       startTimer();
       loadNextSet();
     }
 
-    function getAttemptedIds() {
-      const hist = JSON.parse(localStorage.getItem('ugc_history') || '[]');
-      const userHist = hist.filter(h => h.username === currentUser.username);
-      return new Set(userHist.map(h => h.questionId));
-    }
-
     function loadNextSet() {
+      const allQuestions = database[activeUnitId] || [];
       const attempted = getAttemptedIds();
-      const unattempted = EMBEDDED_QUESTIONS.filter(q => !attempted.has(q.id));
+      const unattempted = allQuestions.filter(q => !attempted.has(q.id));
+
+      if (allQuestions.length === 0) {
+        document.getElementById('questionsContainer').innerHTML = `
+          <div class="upload-fallback-box">
+            <h3 style="color:var(--primary); margin-bottom:10px;">questions.json File Select Karein</h3>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:16px;">
+              questions.json file browser mein direct load karne ke liye niche <b>Choose File</b> par click karke apni <b>questions.json</b> file chunein:
+            </p>
+            <input type="file" id="localJsonPicker" accept=".json" onchange="handleManualJsonUpload(event)" style="font-size:0.9rem;">
+          </div>
+        `;
+        document.getElementById('btnSubmit').style.display = 'none';
+        return;
+      }
 
       if (unattempted.length === 0) {
-        alert("Aapne is unit ke available questions solve kar liye hain! Re-practicing...");
-        currentSet = EMBEDDED_QUESTIONS.slice(0, 5);
+        alert("🎉 Zabardast! Aapne is Unit ke saare questions attempt kar liye hain!");
+        currentSet = allQuestions.slice(0, 5);
       } else {
         currentSet = unattempted.slice(0, 5);
       }
 
-      document.getElementById('unitProgressTxt').innerText = `Attempted: ${attempted.size} / ${EMBEDDED_QUESTIONS.length} Questions`;
+      document.getElementById('unitProgressTxt').innerText = `Attempted: ${attempted.size} / ${allQuestions.length} Questions | Left: ${unattempted.length}`;
       renderCurrentSet();
       document.getElementById('btnSubmit').style.display = 'block';
       document.getElementById('btnNext').style.display = 'none';
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleManualJsonUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const parsed = JSON.parse(evt.target.result);
+          database = parsed;
+          localStorage.setItem('ugc_cached_questions', JSON.stringify(parsed));
+          alert("✓ File successfully load ho gayi! Ab questions start ho rahe hain.");
+          loadNextSet();
+        } catch(err) {
+          alert("Error: File format invalid hai!");
+        }
+      };
+      reader.readAsText(file);
     }
 
     function renderCurrentSet() {
@@ -422,11 +438,11 @@
         card.className = 'q-card';
         card.innerHTML = `
           <div class="q-header">
-            <span class="q-number">Question #${idx + 1} [${q.id}]</span>
+            <span class="q-number">Question #${q.num || (idx+1)} [${q.id}]</span>
           </div>
-          <div class="q-text">${q.q}</div>
+          <div class="q-text">${q.q_en}</div>
           <div class="options-list">
-            ${q.options.map((opt, oIdx) => `
+            ${q.options_en.map((opt, oIdx) => `
               <label class="option-item" id="optLabel_${idx}_${oIdx}">
                 <input type="radio" name="set_q_${idx}" value="${oIdx}" required>
                 <span>${String.fromCharCode(65 + oIdx)}. ${opt}</span>
@@ -443,7 +459,7 @@
 
     function submitSet(e) {
       e.preventDefault();
-      const hist = JSON.parse(localStorage.getItem('ugc_history') || '[]');
+      const hist = JSON.parse(localStorage.getItem('ugc_master_history') || '[]');
 
       currentSet.forEach((q, idx) => {
         const chosen = document.querySelector(`input[name="set_q_${idx}"]:checked`);
@@ -461,20 +477,35 @@
 
         hist.push({
           username: currentUser.username,
+          unitId: activeUnitId,
           questionId: q.id,
-          isCorrect: isCorrect
+          questionText: q.q_en,
+          userAns: userVal,
+          correctAns: q.ans,
+          isCorrect: isCorrect,
+          timestamp: new Date().toISOString()
         });
       });
 
-      localStorage.setItem('ugc_history', JSON.stringify(hist));
+      localStorage.setItem('ugc_master_history', JSON.stringify(hist));
       document.getElementById('btnSubmit').style.display = 'none';
       document.getElementById('btnNext').style.display = 'block';
+    }
+
+    function resetUnitHistory(unitId) {
+      if (!confirm("Kya aap sach mein is Unit ke attempts reset karna chahte hain?")) return;
+      let hist = JSON.parse(localStorage.getItem('ugc_master_history') || '[]');
+      hist = hist.filter(h => !(h.username === currentUser.username && h.unitId === unitId));
+      localStorage.setItem('ugc_master_history', JSON.stringify(hist));
+      loadUnit(unitId);
     }
 
     function startTimer() {
       clearInterval(timerInterval);
       secondsElapsed = 0;
+      timerRunning = true;
       timerInterval = setInterval(() => {
+        if (!timerRunning) return;
         secondsElapsed++;
         const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
         const secs = String(secondsElapsed % 60).padStart(2, '0');
@@ -483,7 +514,82 @@
       }, 1000);
     }
 
-    window.onload = checkSession;
+    function toggleTimer() {
+      timerRunning = !timerRunning;
+      document.getElementById('timerToggleBtn').innerText = timerRunning ? "Pause" : "Resume";
+    }
+
+    function showHistoryView() {
+      clearInterval(timerInterval);
+      const hist = JSON.parse(localStorage.getItem('ugc_master_history') || '[]');
+      const userHist = hist.filter(h => h.username === currentUser.username);
+      const mistakes = userHist.filter(x => !x.isCorrect);
+
+      const main = document.getElementById('mainWorkspace');
+      main.innerHTML = `
+        <div class="view-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h3>My Mistake Analysis Log</h3>
+            <button class="btn btn-sm btn-outline" onclick="loadUnit(${activeUnitId})">Back to Quiz</button>
+          </div>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Total Attempted: ${userHist.length} | Incorrect: ${mistakes.length}</p>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr><th>Question ID</th><th>Question Snippet</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                ${mistakes.length === 0 ? '<tr><td colspan="3" style="text-align:center; color:green;">Zero mistakes! Excellent accuracy.</td></tr>' : ''}
+                ${mistakes.map(m => `
+                  <tr>
+                    <td><code>${m.questionId}</code></td>
+                    <td>${m.questionText.substring(0, 80)}...</td>
+                    <td style="color:var(--danger); font-weight:600;">Incorrect</td>
+                  </tr>
+                `).reverse().join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function showGradeSheet() {
+      clearInterval(timerInterval);
+      const hist = JSON.parse(localStorage.getItem('ugc_master_history') || '[]');
+      const userHist = hist.filter(h => h.username === currentUser.username);
+      const total = userHist.length;
+
+      if (total < 10) {
+        alert("Kam se kam 10 questions attempt karein Grade Card dekhne ke liye!");
+        return;
+      }
+
+      const correct = userHist.filter(x => x.isCorrect).length;
+      const pct = Math.round((correct / total) * 100);
+      let grade = pct >= 85 ? "A+ (JRF Qualified)" : (pct >= 70 ? "A (Assistant Professor)" : "B (Qualified)");
+
+      const main = document.getElementById('mainWorkspace');
+      main.innerHTML = `
+        <div class="view-card" style="text-align:center; border:2px solid var(--primary); padding:35px;">
+          <h2>UGC NET Performance Scorecard</h2>
+          <div style="max-width:400px; margin:20px auto; text-align:left; line-height:2;">
+            <p><strong>Candidate:</strong> ${currentUser.username}</p>
+            <p><strong>Total Solved:</strong> ${total}</p>
+            <p><strong>Correct:</strong> ${correct}</p>
+            <p><strong>Accuracy:</strong> ${pct}%</p>
+            <p><strong>Grade:</strong> <span style="color:var(--primary-hover); font-weight:700;">${grade}</span></p>
+          </div>
+          <button class="btn btn-sm btn-primary" onclick="window.print()">Print Scorecard</button>
+          <button class="btn btn-sm btn-outline" onclick="loadUnit(${activeUnitId})">Resume Quiz</button>
+        </div>
+      `;
+    }
+
+    window.onload = async () => {
+      await loadQuestionsData();
+      checkSession();
+    };
   </script>
 </body>
 </html>
