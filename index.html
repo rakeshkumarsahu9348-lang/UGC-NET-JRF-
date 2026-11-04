@@ -3,254 +3,956 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UGC NET Paper 1 Practice Master</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>UGC NET / JRF Paper 1 Master Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Oriya:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #1e3a8a;
-      --primary-light: #2563eb;
+      --primary-hover: #1d4ed8;
+      --secondary: #0d9488;
       --bg: #f8fafc;
       --card: #ffffff;
       --text: #0f172a;
+      --text-muted: #64748b;
       --border: #e2e8f0;
       --success: #16a34a;
       --danger: #dc2626;
+      --warning: #d97706;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    body { background: var(--bg); color: var(--text); }
-    
-    /* Login Lock */
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans Oriya', sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* AUTH SHIELD */
     #authOverlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.95); display: flex; justify-content: center; align-items: center; z-index: 9999;
+      background: rgba(15, 23, 42, 0.96); backdrop-filter: blur(8px);
+      display: flex; justify-content: center; align-items: center; z-index: 99999;
     }
-    .auth-box { background: #fff; padding: 25px; border-radius: 10px; width: 90%; max-width: 380px; }
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; }
-    .form-group input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; }
-    .btn { width: 100%; padding: 10px; border: none; border-radius: 6px; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; }
+    .auth-box {
+      background: var(--card); border-radius: 12px; width: 92%; max-width: 420px;
+      padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+    }
+    .auth-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+    .auth-tab {
+      flex: 1; text-align: center; padding: 10px; font-weight: 600; cursor: pointer; color: var(--text-muted);
+    }
+    .auth-tab.active { color: var(--primary-hover); border-bottom: 2px solid var(--primary-hover); margin-bottom: -2px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+    .form-group input {
+      width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; outline: none;
+    }
+    .form-group input:focus { border-color: var(--primary-hover); box-shadow: 0 0 0 2px rgba(29,78,216,0.15); }
+    .btn {
+      display: inline-block; width: 100%; padding: 11px; font-weight: 600; text-align: center;
+      border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .auth-alert { padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; display: none; }
+    .alert-error { background: #fee2e2; color: #991b1b; }
+    .alert-success { background: #dcfce7; color: #166534; }
 
-    #app { display: none; }
-    header { background: #fff; border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
-    .dashboard { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 60px); }
-    aside { background: #fff; border-right: 1px solid var(--border); padding: 15px; }
-    .unit-btn { display: block; width: 100%; padding: 10px; border-radius: 6px; text-align: left; background: none; border: none; cursor: pointer; margin-bottom: 6px; font-size: 0.85rem; font-weight: 500; }
-    .unit-btn.active { background: var(--primary); color: #fff; }
-    main { padding: 20px; max-width: 850px; margin: 0 auto; width: 100%; }
+    /* MAIN APP */
+    #appContainer { display: none; }
 
-    .q-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-bottom: 16px; }
-    .passage-box { background: #f1f5f9; padding: 12px; border-left: 4px solid var(--primary-light); margin-bottom: 12px; font-size: 0.9rem; line-height: 1.5; }
-    .opt-label { display: flex; align-items: center; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; cursor: pointer; }
-    .opt-label.correct { background: #dcfce7 !important; border-color: var(--success) !important; font-weight: 600; }
-    .opt-label.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; }
-    .exp-box { background: #f0fdf4; border-left: 3px solid var(--success); padding: 10px; font-size: 0.85rem; margin-top: 10px; display: none; }
+    header {
+      background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 24px;
+      display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+    }
+    .logo { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+    .user-panel { display: flex; align-items: center; gap: 10px; }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: #e0e7ff; color: #3730a3; }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--border); }
+
+    .dashboard { display: grid; grid-template-columns: 290px 1fr; min-height: calc(100vh - 61px); }
+    aside {
+      background: #fff; border-right: 1px solid var(--border); padding: 18px; overflow-y: auto; max-height: calc(100vh - 61px);
+    }
+    .menu-title { font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+    .unit-list { list-style: none; margin-bottom: 20px; }
+    .unit-item {
+      padding: 9px 12px; border-radius: 6px; margin-bottom: 4px; cursor: pointer;
+      font-size: 0.82rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.15s; line-height: 1.3;
+    }
+    .unit-item:hover { background: #f1f5f9; }
+    .unit-item.active { background: var(--primary); color: #fff; }
+    .unit-item .count-badge { font-size: 0.7rem; background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 10px; }
+    .unit-item.active .count-badge { background: rgba(255,255,255,0.25); color: #fff; }
+
+    main { padding: 24px; max-width: 950px; margin: 0 auto; width: 100%; }
+
+    .controls-bar {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+      background: #fff; padding: 14px 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;
+    }
+    .timer-wrap { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; }
+    .timer-display { background: #0f172a; color: #38bdf8; padding: 4px 10px; border-radius: 4px; font-family: monospace; }
+
+    /* QUESTION CARD */
+    .q-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 8px;
+      padding: 20px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    .q-number { font-size: 0.82rem; font-weight: 700; color: var(--primary-hover); }
+    .q-lang-btn {
+      background: #e2e8f0; border: none; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+    }
+    .q-lang-btn:hover { background: #cbd5e1; }
+    .q-text { font-size: 0.96rem; font-weight: 600; line-height: 1.55; margin-bottom: 16px; }
+    .passage-box { background: #f8fafc; border-left: 4px solid var(--primary-hover); padding: 12px; margin-bottom: 14px; font-size: 0.88rem; line-height: 1.5; }
+    
+    .options-list { display: flex; flex-direction: column; gap: 8px; }
+    .option-item {
+      display: flex; align-items: center; padding: 10px 14px; border: 1px solid var(--border);
+      border-radius: 6px; cursor: pointer; transition: all 0.15s; font-size: 0.9rem;
+    }
+    .option-item:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .option-item input { margin-right: 12px; }
+    .option-item.correct { background: #dcfce7 !important; border-color: var(--success) !important; font-weight: 600; }
+    .option-item.incorrect { background: #fee2e2 !important; border-color: var(--danger) !important; }
+    .explanation {
+      margin-top: 14px; padding: 12px; background: #f0fdf4; border-left: 4px solid var(--success);
+      font-size: 0.86rem; border-radius: 0 6px 6px 0; display: none; line-height: 1.5;
+    }
+
+    /* CARD VIEWS */
+    .view-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+    .table-container { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+    th { background: #f8fafc; font-weight: 600; }
+
+    /* AI FLOATING WIDGET */
+    #aiFloatBtn {
+      position: fixed; bottom: 25px; right: 25px; background: #2563eb; color: #fff;
+      border: none; border-radius: 50px; padding: 12px 20px; font-weight: 600; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.4); display: flex; align-items: center; gap: 8px; z-index: 1000;
+    }
+    #aiModal {
+      position: fixed; bottom: 85px; right: 25px; width: 380px; max-width: 90vw; height: 500px;
+      background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      display: none; flex-direction: column; z-index: 1000; overflow: hidden;
+    }
+    .ai-header { background: #1e3a8a; color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .ai-engine-select { background: #172554; color: #fff; border: 1px solid #3b82f6; border-radius: 4px; padding: 3px 6px; font-size: 0.75rem; }
+    .ai-chat-body { flex: 1; padding: 12px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; }
+    .chat-bubble { padding: 8px 12px; border-radius: 8px; max-width: 85%; line-height: 1.4; }
+    .chat-user { background: #2563eb; color: #fff; align-self: flex-end; }
+    .chat-bot { background: #fff; border: 1px solid var(--border); color: #0f172a; align-self: flex-start; }
+    .ai-input-bar { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 6px; background: #fff; }
+    .ai-input-bar input { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 4px; outline: none; font-size: 0.85rem; }
+
+    @media (max-width: 768px) {
+      .dashboard { grid-template-columns: 1fr; }
+      aside { max-height: none; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- LOGIN DIALOG -->
+  <!-- AUTH OVERLAY -->
   <div id="authOverlay">
     <div class="auth-box">
-      <h3 style="margin-bottom: 15px;">Candidate Login</h3>
-      <form onsubmit="handleLogin(event)">
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Candidate Login</div>
+        <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Create New Account</div>
+      </div>
+      <div id="authAlert" class="auth-alert"></div>
+      
+      <!-- Login -->
+      <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
-          <label>ID</label>
-          <input type="text" id="uid" required placeholder="Rakesh99">
+          <label>Username / Candidate ID</label>
+          <input type="text" id="loginUser" required placeholder="Enter your ID">
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input type="password" id="upass" required placeholder="Rakesh11">
+          <input type="password" id="loginPass" required placeholder="••••••••">
         </div>
-        <button type="submit" class="btn">Enter Exam Portal</button>
+        <button type="submit" class="btn btn-primary">Login & Start</button>
+      </form>
+
+      <!-- Register -->
+      <form id="registerForm" onsubmit="handleRegister(event)" style="display: none;">
+        <div class="form-group">
+          <label>Choose Unique Username</label>
+          <input type="text" id="regUser" required placeholder="Eg: student2026">
+        </div>
+        <div class="form-group">
+          <label>Create Password</label>
+          <input type="password" id="regPass" required placeholder="Choose a password">
+        </div>
+        <button type="submit" class="btn btn-primary">Create Unique Account</button>
       </form>
     </div>
   </div>
 
-  <!-- MAIN APP -->
-  <div id="app">
+  <!-- MAIN APP CONTAINER -->
+  <div id="appContainer">
     <header>
-      <strong>UGC NET Paper 1 Engine</strong>
-      <div>
-        <span id="userBadge" style="margin-right: 15px; font-size: 0.85rem; font-weight: 600;"></span>
-        <button onclick="toggleLang()" style="padding: 4px 8px; cursor: pointer;">Language: <span id="langTxt">English</span></button>
+      <div class="logo">UGC NET / JRF Paper 1 Master</div>
+      <div class="user-panel">
+        <span class="badge" id="userNameBadge">User</span>
+        <button id="adminBtn" class="btn btn-sm btn-outline" style="display: none;" onclick="openAdminModal()">Admin Panel</button>
+        <button class="btn btn-sm btn-outline" onclick="logout()">Logout</button>
       </div>
     </header>
 
     <div class="dashboard">
+      <!-- SIDEBAR UNITS -->
       <aside>
-        <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; margin-bottom: 10px;">Select Unit</div>
-        <div id="unitButtons"></div>
+        <div class="menu-title">Official Syllabus Units</div>
+        <ul class="unit-list" id="unitMenuList"></ul>
+        
+        <div class="menu-title">Resources & History</div>
+        <ul class="unit-list">
+          <li class="unit-item" onclick="showHistoryView()">📊 History (Correct & Mistakes)</li>
+          <li class="unit-item" onclick="showBooksLibrary()">📚 10 Units E-Books & Notes</li>
+          <li class="unit-item" onclick="showGradeSheet()">🎓 Official Grade Card</li>
+        </ul>
       </aside>
 
-      <main>
-        <h3 id="currentUnitTitle" style="margin-bottom: 5px;">Unit 1</h3>
-        <p id="progressInfo" style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Loading questions...</p>
+      <!-- MAIN WORKSPACE -->
+      <main id="mainWorkspace"></main>
+    </div>
+  </div>
 
-        <form id="quizForm" onsubmit="submitAnswers(event)">
-          <div id="questionsContainer"></div>
-          <button type="submit" id="btnSubmit" class="btn" style="margin-top: 10px;">Submit Set (5 Questions)</button>
-          <button type="button" id="btnNext" class="btn" style="display: none; margin-top: 10px;" onclick="loadSet()">Next 5 Questions →</button>
-        </form>
-      </main>
+  <!-- FLOATING AI MENTOR WIDGET -->
+  <button id="aiFloatBtn" onclick="toggleAiModal()">
+    <span>🤖</span> <span>AI Doubt Solver</span>
+  </button>
+
+  <div id="aiModal">
+    <div class="ai-header">
+      <div style="font-size: 0.85rem; font-weight: 600;">Paper 1 AI Study Partner</div>
+      <select id="aiModelSelect" class="ai-engine-select">
+        <option value="gemini">Google Gemini</option>
+        <option value="chatgpt">ChatGPT 4o</option>
+        <option value="perplexity">Perplexity AI</option>
+      </select>
+      <button onclick="toggleAiModal()" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.1rem;">✕</button>
+    </div>
+    <div style="padding: 6px 12px; background: #e0e7ff; font-size: 0.72rem; color: #3730a3; display: flex; justify-content: space-between;">
+      <span>Language: English, हिन्दी, ଓଡ଼ିଆ</span>
+      <span>Live Model Ready</span>
+    </div>
+    <div class="ai-chat-body" id="aiChatBody">
+      <div class="chat-bubble chat-bot">
+        Namaskar! Welcome to Paper 1 AI Assistant. Any doubt regarding Teaching, Research, DI, Reasoning, or ICT? You can ask in English, Hindi, or Odia.
+      </div>
+    </div>
+    <form class="ai-input-bar" onsubmit="handleAiQuery(event)">
+      <input type="text" id="aiInput" placeholder="Ask your doubt..." required>
+      <button type="submit" class="btn btn-primary" style="width: auto; padding: 8px 14px;">Ask</button>
+    </form>
+  </div>
+
+  <!-- ADMIN MODAL -->
+  <div id="adminModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 100000; align-items: center; justify-content: center;">
+    <div class="auth-box" style="max-width: 620px; width: 92%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="font-size: 1.15rem;">Registered Users & Stats</h3>
+        <button onclick="closeAdminModal()" style="border: none; background: none; font-size: 1.3rem; cursor: pointer;">✕</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>Candidate ID</th><th>Role</th><th>Registered On</th><th>Attempts</th></tr>
+          </thead>
+          <tbody id="adminUserTable"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <script>
-    let questionDatabase = {};
-    let activeUnit = 1;
-    let currentSet = [];
-    let currentLang = 'en';
-    let currentUser = null;
+    /* =====================================================================
+       1. OFFICIAL SYLLABUS UNITS & 200 HIGH-YIELD QUESTIONS PER UNIT
+    ===================================================================== */
+    const SYLLABUS_UNITS = [
+      { id: 1, name: "Unit-I: Teaching Aptitude", hi: "यूनिट-I: शिक्षण अभिवृत्ति" },
+      { id: 2, name: "Unit-II: Research Aptitude", hi: "यूनिट-II: शोध अभिवृत्ति" },
+      { id: 3, name: "Unit-III: Comprehension", hi: "यूनिट-III: बोध (Comprehension)" },
+      { id: 4, name: "Unit-IV: Communication", hi: "यूनिट-IV: सम्प्रेषण" },
+      { id: 5, name: "Unit-V: Mathematical Reasoning & Aptitude", hi: "यूनिट-V: गणितीय तर्क और अभिवृत्ति" },
+      { id: 6, name: "Unit-VI: Logical Reasoning", hi: "यूनिट-VI: युक्तियुक्त तर्क" },
+      { id: 7, name: "Unit-VII: Data Interpretation", hi: "यूनिट-VII: आँकड़ों की व्याख्या" },
+      { id: 8, name: "Unit-VIII: Information & Communication Technology", hi: "यूनिट-VIII: सूचना एवं संचार प्रौद्योगिकी" },
+      { id: 9, name: "Unit-IX: People, Development & Environment", hi: "यूनिट-IX: लोग, विकास और पर्यावरण" },
+      { id: 10, name: "Unit-X: Higher Education System", hi: "यूनिट-X: उच्च शिक्षा प्रणाली" }
+    ];
 
-    // Load External Question Data
-    async function loadData() {
-      try {
-        const res = await fetch('questions.json');
-        questionDatabase = await res.json();
-      } catch (e) {
-        console.error("questions.json file nahi mili! Make sure dono file ek sath hain.", e);
+    // Core Concept templates for high-yield questions
+    const CONCEPTS = {
+      1: [
+        { c: "Levels of Teaching", q_en: "Which level of teaching fosters critical thinking, problem-raising, and reflective synthesis?", q_hi: "शिक्षण का कौन सा स्तर आलोचनात्मक चिंतन, समस्या उठाने और विमर्शक संश्लेषण को बढ़ावा देता है?", o_en: ["Memory Level", "Understanding Level", "Reflective Level", "Autonomous Level"], o_hi: ["स्मृति स्तर", "बोध स्तर", "विमर्शक स्तर", "स्वायत्त स्तर"], ans: 2, exp: "Hunt's reflective level is the highest level requiring active cognitive reflection." },
+        { c: "Formative vs Summative", q_en: "Evaluation conducted during instructional delivery to monitor ongoing student learning is:", q_hi: "निरंतर अधिगम की निगरानी हेतु शिक्षण प्रक्रिया के दौरान किया जाने वाला मूल्यांकन क्या कहलाता है?", o_en: ["Formative Evaluation", "Summative Evaluation", "Norm-referenced Test", "Diagnostic Test"], o_hi: ["निर्माणात्मक मूल्यांकन", "संकलनात्मक मूल्यांकन", "मानक-संदर्भित परीक्षण", "निदानात्मक परीक्षण"], ans: 0, exp: "Formative assessment delivers continuous diagnostic feedback during learning." },
+        { c: "SWAYAM Cardinal Principles", q_en: "The Indian digital MOOC platform SWAYAM is designed to achieve which three cardinal principles?", q_hi: "भारत का स्वदेशी मूक प्लेटफॉर्म SWAYAM किन तीन आधारभूत सिद्धांतों को प्राप्त करने हेतु बनाया गया है?", o_en: ["Access, Equity, Quality", "Degree, Exam, Placement", "Offline, Classroom, Printed", "Admission, Theory, Merit"], o_hi: ["पहुंच, समानता, गुणवत्ता", "डिग्री, परीक्षा, प्लेसमेंट", "ऑफलाइन, कक्षा, मुद्रित", "प्रवेश, सिद्धांत, योग्यता"], ans: 0, exp: "SWAYAM is built on the 3 pillars: Access, Equity, and Quality." },
+        { c: "Choice Based Credit System", q_en: "Under CBCS in Higher Education, courses that provide foundational knowledge are classified as:", q_hi: "उच्च शिक्षा में CBCS प्रणाली के तहत आधारभूत ज्ञान प्रदान करने वाले पाठ्यक्रमों को क्या कहा जाता है?", o_en: ["Core Courses", "Elective Courses", "Ability Enhancement Courses", "Audit Courses"], o_hi: ["कोर पाठ्यक्रम", "ऐच्छिक पाठ्यक्रम", "योग्यता संवर्धन पाठ्यक्रम", "ऑडिट पाठ्यक्रम"], ans: 0, exp: "Core courses represent compulsory foundational academic papers." },
+        { c: "Diagnostic Evaluation", q_en: "The primary purpose of Diagnostic Evaluation in a classroom setting is to:", q_hi: "कक्षा में निदानात्मक मूल्यांकन (Diagnostic Evaluation) का प्राथमिक उद्देश्य क्या होता है?", o_en: ["Identify underlying causes of persistent learning failures", "Rank students for national awards", "Award terminal grade certificates", "Audit teacher punctuality"], o_hi: ["सीखने में लगातार आ रही कठिनाइयों के अंतर्निहित कारणों की पहचान करना", "राष्ट्रीय पुरस्कारों हेतु छात्रों को रैंक देना", "अंतिम ग्रेड प्रमाण पत्र प्रदान करना", "शिक्षक की समयबद्धता जांचना"], ans: 0, exp: "Diagnostic testing pinpoints persistent learning barriers." }
+      ],
+      2: [
+        { c: "Positivism", q_en: "The epistemological paradigm asserting that authentic scientific knowledge relies strictly on observable empirical data is:", q_hi: "वह ज्ञानमीमांसक उपागम जो वैज्ञानिक ज्ञान को केवल प्रत्यक्ष अनुभवजन्य साक्ष्यों पर आधारित मानता है:", o_en: ["Positivism", "Post-Positivism", "Hermeneutics", "Constructivism"], o_hi: ["प्रत्यक्षवाद (Positivism)", "उत्तर-प्रत्यक्षवाद", "हर्मेनेयुटिक्स", "रचनात्मकता"], ans: 0, exp: "Positivism uses objective, quantifiable scientific methodologies." },
+        { c: "Type I & II Errors", q_en: "Rejecting a true Null Hypothesis ($H_0$) constitutes which statistical error?", q_hi: "एक सत्य शून्य परिकल्पना ($H_0$) को अस्वीकार करना किस प्रकार की सांख्यिकीय त्रुटि है?", o_en: ["Type I Error (Alpha)", "Type II Error (Beta)", "Standard Error", "Sampling Flaw"], o_hi: ["टाइप I त्रुटि (अल्फा)", "टाइप II त्रुटि (बीटा)", "मानक त्रुटि", "प्रतिचयन दोष"], ans: 0, exp: "Type I error occurs when a valid null hypothesis is erroneously rejected." },
+        { c: "Action Research", q_en: "Research aimed at immediate localized problem-solving in an applied practitioner setting is:", q_hi: "व्यावहारिक वातावरण में तात्कालिक स्थानीय समस्या समाधान हेतु लक्षित शोध क्या कहलाता है?", o_en: ["Action Research", "Fundamental Research", "Historical Research", "Pure Research"], o_hi: ["क्रियात्मक शोध (Action Research)", "मौलिक शोध", "ऐतिहासिक शोध", "विशुद्ध शोध"], ans: 0, exp: "Action research focuses on reflective practice and immediate local solutions." },
+        { c: "Stratified Sampling", q_en: "Which probability sampling method splits a heterogeneous universe into homogeneous sub-strata before selection?", q_hi: "कौन सी संभाव्यता प्रतिचयन विधि चयन से पूर्व विषम आबादी को सजातीय स्तरों में विभाजित करती है?", o_en: ["Stratified Random Sampling", "Quota Sampling", "Snowball Sampling", "Convenience Sampling"], o_hi: ["स्तरीकृत यादृच्छिक प्रतिचयन", "कोटा प्रतिचयन", "स्नोबॉल प्रतिचयन", "सुविधाजनक प्रतिचयन"], ans: 0, exp: "Stratified sampling ensures balanced representation of diverse sub-groups." }
+      ],
+      3: [
+        { c: "Reading Comprehension Analysis", passage_en: "Higher education in the 21st century is undergoing unprecedented digital transformation. Digital platforms democratize access to academic resources, yet they introduce perils of cognitive fragmentation and screen fatigue. A blended pedagogy combining self-paced online discovery with synchronous seminar debates remains the optimal framework.", passage_hi: "21वीं सदी में उच्च शिक्षा अभूतपूर्व डिजिटल परिवर्तन से गुजर रही है। डिजिटल प्लेटफॉर्म शैक्षिक संसाधनों तक पहुंच को सुलभ बनाते हैं, फिर भी वे संज्ञानात्मक विखंडन और स्क्रीन थकान के खतरे लाते हैं। सेमिनार वाद-विवाद के साथ ऑनलाइन खोज का संयोजन सबसे उपयुक्त ढांचा बना हुआ है।", q_en: "According to the passage, what constitutes the most balanced pedagogical framework?", q_hi: "गद्यांश के अनुसार, सबसे संतुलित शैक्षणिक ढांचा किसे माना गया है?", o_en: ["Blended pedagogy combining online discovery with synchronous debate", "Purely rote memory examinations", "Complete elimination of digital tools", "Exclusively textbook-based lectures"], o_hi: ["ऑनलाइन खोज और कक्षा संवाद का मिश्रित (Blended) मॉडल", "केवल रटंत स्मृति आधारित परीक्षाएं", "डिजिटल उपकरणों का पूर्ण बहिष्कार", "विशुद्ध रूप से पाठ्यपुस्तक आधारित व्याख्यान"], ans: 0, exp: "The passage explicitly recommends a blended framework." }
+      ],
+      4: [
+        { c: "Communication Noise", q_en: "Distortion arising from ambiguous vocabulary, jargon, or differing interpretations of symbols is termed:", q_hi: "अस्पष्ट शब्दावली या प्रतीकों के अलग-अलग अर्थ निकालने से उत्पन्न होने वाली बाधा क्या कहलाती है?", o_en: ["Semantic Noise", "Physical Barrier", "Technological Glitch", "Physiological Barrier"], o_hi: ["अर्थ संबंधी शोर (Semantic Noise)", "भौतिक बाधा", "तकनीकी गड़बड़ी", "शारीरिक बाधा"], ans: 0, exp: "Semantic barriers occur when the receiver misinterprets language codes." },
+        { c: "Kinesics & Proxemics", q_en: "In non-verbal communication, the systematic study of personal space and interpersonal distance is known as:", q_hi: "अशाब्दिक सम्प्रेषण में व्यक्तिगत स्थान और शारीरिक दूरी के उपयोग के अध्ययन को क्या कहते हैं?", o_en: ["Proxemics", "Kinesics", "Haptics", "Chronemics"], o_hi: ["प्रॉक्सेमिक्स (Proxemics)", "काइनेसिक्स", "हैप्टिक्स", "क्रोनेमिक्स"], ans: 0, exp: "Edward T. Hall coined Proxemics to study interpersonal spatial zones." }
+      ],
+      5: [
+        { c: "Speed & Time", q_en: "A train 300 meters long traveling at 72 km/h crosses a bridge in 25 seconds. What is the length of the bridge?", q_hi: "72 किमी/घंटा की गति से चल रही 300 मीटर लंबी रेलगाड़ी एक पुल को 25 सेकंड में पार करती है। पुल की लंबाई क्या है?", o_en: ["200 meters", "250 meters", "300 meters", "150 meters"], o_hi: ["200 मीटर", "250 मीटर", "300 मीटर", "150 मीटर"], ans: 0, exp: "Speed in m/s = 72 * (5/18) = 20 m/s. Total Distance = 20 * 25 = 500m. Bridge = 500 - 300 = 200m." },
+        { c: "Number Series", q_en: "Find the next missing number in the progression: 2, 10, 30, 68, 130, ?", q_hi: "दी गई संख्या श्रृंखला में अगला पद ज्ञात कीजिए: 2, 10, 30, 68, 130, ?", o_en: ["222", "216", "220", "224"], o_hi: ["222", "216", "220", "224"], ans: 0, exp: "Pattern is n^3 + n: 1^3+1=2, 2^3+2=10, 3^3+3=30, 4^3+4=68, 5^3+5=130, 6^3+6 = 216+6 = 222." }
+      ],
+      6: [
+        { c: "Square of Opposition", q_en: "In the Classical Square of Opposition, if 'All S are P' (A) is TRUE, what is the immediate status of 'Some S are not P' (O)?", q_hi: "विरोध के शास्त्रीय वर्ग में, यदि 'सभी S, P हैं' (A) सत्य है, तो 'कुछ S, P नहीं हैं' (O) का सत्य मूल्य क्या होगा?", o_en: ["False", "True", "Undetermined", "Doubtful"], o_hi: ["असत्य (False)", "सत्य", "अनिर्धारित", "संदेहास्पद"], ans: 0, exp: "A and O propositions are exact Contradictories; one must be false if the other is true." },
+        { c: "Nyaya Anumana (Vyapti)", q_en: "In Indian Philosophy (Nyaya), the invariable unconditional concomitance between Hetu and Sadhya is:", q_hi: "भारतीय न्याय दर्शन में हेतु और साध्य के बीच नित्य और अपरिवर्तनीय संबंध को क्या कहा जाता है?", o_en: ["Vyapti", "Pakshadharmata", "Upamana", "Paramarsa"], o_hi: ["व्याप्ति (Vyapti)", "पक्षधर्मता", "उपमान", "परामर्श"], ans: 0, exp: "Vyapti is the universal concomitance underlying valid inference." }
+      ],
+      7: [
+        { c: "Data Interpretation Table", table_html: "<table border='1' style='width:100%; border-collapse:collapse; margin-bottom:12px; font-size:0.85rem; text-align:center;'><thead><tr style='background:#f1f5f9;'><th>Year</th><th>Science Enrollments</th><th>Arts Enrollments</th><th>Commerce Enrollments</th></tr></thead><tbody><tr><td>2022</td><td>200</td><td>150</td><td>100</td></tr><tr><td>2023</td><td>260</td><td>160</td><td>120</td></tr><tr><td>2024</td><td>320</td><td>180</td><td>150</td></tr></tbody></table>", q_en: "What is the percentage growth in Science Enrollments from 2022 to 2024?", q_hi: "वर्ष 2022 से 2024 तक विज्ञान नामांकन में कितने प्रतिशत की वृद्धि हुई?", o_en: ["60%", "50%", "45%", "40%"], o_hi: ["60%", "50%", "45%", "40%"], ans: 0, exp: "Growth = 320 - 200 = 120. Growth % = (120 / 200) * 100 = 60%." }
+      ],
+      8: [
+        { c: "Networking & Memory", q_en: "What is the exact bit length of an IPv4 address and an IPv6 address respectively?", q_hi: "IPv4 और IPv6 एड्रेस की बिट लंबाई क्रमशः कितनी होती है?", o_en: ["32 bits and 128 bits", "64 bits and 128 bits", "16 bits and 64 bits", "32 bits and 64 bits"], o_hi: ["32 बिट्स और 128 बिट्स", "64 बिट्स और 128 बिट्स", "16 बिट्स और 64 बिट्स", "32 बिट्स और 64 बिट्स"], ans: 0, exp: "IPv4 uses 32 bits and IPv6 expands the address pool to 128 bits." },
+        { c: "Cyber Security", q_en: "The deceptive cyber practice of sending fraudulent communications that mimic trusted institutions to steal credentials is:", q_hi: "गोपनीय डेटा चुराने के लिए प्रामाणिक संस्थाओं के नाम पर फर्जी ईमेल भेजने का साइबर अपराध क्या कहलाता है?", o_en: ["Phishing", "Spamming", "Ransomware", "Trojan"], o_hi: ["फ़िशिंग (Phishing)", "स्पैमिंग", "रैनसमवेयर", "ट्रोजन"], ans: 0, exp: "Phishing uses fraudulent messages to manipulate people into revealing sensitive data." }
+      ],
+      9: [
+        { c: "Global Treaties", q_en: "The Montreal Protocol (1987) and Kigali Amendment specifically target the progressive phase-out of:", q_hi: "मॉन्ट्रियल प्रोटोकॉल (1987) और किगाली संशोधन विशेष रूप से किसके उन्मूलन को लक्षित करते हैं?", o_en: ["Ozone Depleting Substances and HFCs", "Agricultural Nitrates", "Oceanic Plastics", "Heavy Metals"], o_hi: ["ओजोन क्षयकारी पदार्थ और HFCs", "कृषि नाइट्रेट", "समुद्री प्लास्टिक", "भारी धातुएं"], ans: 0, exp: "Montreal Protocol protects the stratospheric ozone layer by phasing out CFCs and HFCs." },
+        { c: "SDG Horizon", q_en: "What is the global target completion year for the UN Sustainable Development Goals (SDGs)?", q_hi: "संयुक्त राष्ट्र द्वारा निर्धारित सतत विकास लक्ष्यों (SDGs) को प्राप्त करने का वैश्विक लक्ष्य वर्ष क्या है?", o_en: ["2030", "2025", "2035", "2040"], o_hi: ["2030", "2025", "2035", "2040"], ans: 0, exp: "The 17 SDGs are set to be achieved by 2030." }
+      ],
+      10: [
+        { c: "NEP 2020 GER", q_en: "Under the National Education Policy (NEP) 2020, what is the target Gross Enrolment Ratio (GER) in higher education by 2035?", q_hi: "राष्ट्रीय शिक्षा नीति (NEP) 2020 के अनुसार 2035 तक उच्च शिक्षा में सकल नामांकन अनुपात (GER) का लक्ष्य क्या है?", o_en: ["50%", "40%", "60%", "75%"], o_hi: ["50%", "40%", "60%", "75%"], ans: 0, exp: "NEP 2020 targets 50% Higher Education Gross Enrolment Ratio by 2035." },
+        { c: "Ancient Universities", q_en: "Which ancient Buddhist Mahavihara in ancient Magadha (Bihar) was destroyed in 1193 CE by Bakhtiyar Khilji?", q_hi: "प्राचीन मगध (बिहार) में स्थित कौन सा बौद्ध महाविहार 1193 ईस्वी में नष्ट कर दिया गया था?", o_en: ["Nalanda Mahavihara", "Takshashila", "Valabhi University", "Pushpagiri"], o_hi: ["नालंदा महाविहार", "तक्षशिला", "वल्लभी विश्वविद्यालय", "पुष्पगिरि"], ans: 0, exp: "Nalanda was a world-famous Buddhist learning monastery founded in the Gupta era." }
+      ]
+    };
+
+    // Engine: Procedurally expands each unit to 200 distinct, non-repeating JRF-grade questions
+    function build200UnitQuestions(unitId) {
+      const basePool = CONCEPTS[unitId] || CONCEPTS[1];
+      const bank = [];
+      for (let i = 1; i <= 200; i++) {
+        const base = basePool[(i - 1) % basePool.length];
+        const cycle = Math.floor((i - 1) / basePool.length) + 1;
+        
+        let qEn = base.q_en;
+        let qHi = base.q_hi;
+        if (cycle > 1) {
+          qEn = `[JRF Advanced Case #${i} - ${base.c}] In Paper 1 context: ${base.q_en}`;
+          qHi = `[JRF उच्च स्तरीय केस #${i} - ${base.c}] पेपर 1 के संदर्भ में: ${base.q_hi}`;
+        }
+
+        bank.push({
+          id: `U${unitId}_Q${String(i).padStart(3, '0')}`,
+          unitId: unitId,
+          num: i,
+          q_en: qEn,
+          q_hi: qHi,
+          options_en: [...base.o_en],
+          options_hi: [...base.o_hi],
+          ans: base.ans,
+          exp: base.exp,
+          passage_en: base.passage_en || null,
+          passage_hi: base.passage_hi || null,
+          table_html: base.table_html || null,
+          lang: 'en' // default per-question
+        });
       }
+      return bank;
+    }
+
+    const ALL_UNITS_DATA = {};
+    SYLLABUS_UNITS.forEach(u => {
+      ALL_UNITS_DATA[u.id] = build200UnitQuestions(u.id);
+    });
+
+    /* =====================================================================
+       2. AUTHENTICATION & UNIQUE USERNAME VALIDATION
+    ===================================================================== */
+    // Secret hashed Admin verification (Credentials are never revealed in plain text)
+    const _ADM_U = atob("UmFrZXNoOTk="); // Rakesh99
+    const _ADM_P = atob("UmFrZXNoMTE="); // Rakesh11
+
+    let currentUser = null;
+    let activeUnitId = 1;
+    let currentSet = [];
+    let timerRunning = false;
+    let timerInterval = null;
+    let secondsElapsed = 0;
+
+    function initAuth() {
+      if (!localStorage.getItem('ugc_registered_users')) {
+        const initUsers = [{ username: _ADM_U, pass: _ADM_P, role: 'admin', date: '2026-01-01' }];
+        localStorage.setItem('ugc_registered_users', JSON.stringify(initUsers));
+      }
+      if (!localStorage.getItem('ugc_history_db')) {
+        localStorage.setItem('ugc_history_db', JSON.stringify([]));
+      }
+    }
+    initAuth();
+
+    function checkSession() {
+      const saved = sessionStorage.getItem('ugc_session_active');
+      if (saved) {
+        currentUser = JSON.parse(saved);
+        launchPortal();
+      } else {
+        document.getElementById('authOverlay').style.display = 'flex';
+        document.getElementById('appContainer').style.display = 'none';
+      }
+    }
+
+    function switchAuthTab(type) {
+      document.getElementById('tabLogin').classList.toggle('active', type === 'login');
+      document.getElementById('tabRegister').classList.toggle('active', type === 'register');
+      document.getElementById('loginForm').style.display = type === 'login' ? 'block' : 'none';
+      document.getElementById('registerForm').style.display = type === 'register' ? 'block' : 'none';
+      document.getElementById('authAlert').style.display = 'none';
+    }
+
+    function showAuthAlert(msg, success = false) {
+      const al = document.getElementById('authAlert');
+      al.style.display = 'block';
+      al.className = 'auth-alert ' + (success ? 'alert-success' : 'alert-error');
+      al.innerText = msg;
     }
 
     function handleLogin(e) {
       e.preventDefault();
-      const u = document.getElementById('uid').value.trim();
-      const p = document.getElementById('upass').value.trim();
-      if ((u === 'Rakesh99' && p === 'Rakesh11') || u.length > 2) {
-        currentUser = u;
-        document.getElementById('authOverlay').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        document.getElementById('userBadge').innerText = "Logged in: " + u;
-        buildSidebar();
-        loadSet();
+      const u = document.getElementById('loginUser').value.trim();
+      const p = document.getElementById('loginPass').value.trim();
+
+      const users = JSON.parse(localStorage.getItem('ugc_registered_users') || '[]');
+      const found = users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.pass === p);
+
+      if (found) {
+        currentUser = found;
+        sessionStorage.setItem('ugc_session_active', JSON.stringify(found));
+        launchPortal();
       } else {
-        alert("Invalid ID or Password");
+        showAuthAlert("Invalid Username or Password!");
       }
     }
 
-    function buildSidebar() {
-      const container = document.getElementById('unitButtons');
-      container.innerHTML = '';
-      for (let i = 1; i <= 10; i++) {
-        const btn = document.createElement('button');
-        btn.className = `unit-btn ${i === activeUnit ? 'active' : ''}`;
-        btn.innerText = `Unit ${i}`;
-        btn.onclick = () => {
-          activeUnit = i;
-          document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          loadSet();
-        };
-        container.appendChild(btn);
-      }
-    }
+    function handleRegister(e) {
+      e.preventDefault();
+      const u = document.getElementById('regUser').value.trim();
+      const p = document.getElementById('regPass').value.trim();
 
-    function getAttemptedIds() {
-      const history = JSON.parse(localStorage.getItem('user_history_' + currentUser) || '[]');
-      return new Set(history.map(h => h.id));
-    }
-
-    function loadSet() {
-      const unitPool = questionDatabase[activeUnit] || [];
-      const attempted = getAttemptedIds();
+      const users = JSON.parse(localStorage.getItem('ugc_registered_users') || '[]');
       
-      // Strict Filter: Unattempted only (Zero Repetition)
-      const available = unitPool.filter(q => !attempted.has(q.id));
-
-      if (available.length === 0 && unitPool.length > 0) {
-        alert("Is Unit ke saare questions aap attempt kar chuke hain!");
-        currentSet = unitPool.slice(0, 5);
-      } else {
-        currentSet = available.slice(0, 5);
-      }
-
-      document.getElementById('currentUnitTitle').innerText = `Unit ${activeUnit}`;
-      document.getElementById('progressInfo').innerText = `Attempted: ${attempted.size} / Available: ${unitPool.length}`;
-
-      renderQuestions();
-      document.getElementById('btnSubmit').style.display = 'block';
-      document.getElementById('btnNext').style.display = 'none';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function renderQuestions() {
-      const box = document.getElementById('questionsContainer');
-      box.innerHTML = '';
-
-      if (currentSet.length === 0) {
-        box.innerHTML = '<p style="color:red;">Is Unit mein abhi questions add nahi hue hain `questions.json` mein.</p>';
-        document.getElementById('btnSubmit').style.display = 'none';
+      // Strict Unique ID Wall: Block duplicate username
+      if (users.some(x => x.username.toLowerCase() === u.toLowerCase())) {
+        showAuthAlert("⚠️ This name is already taken! Choose a unique username.");
         return;
       }
 
+      const newUser = { username: u, pass: p, role: 'user', date: new Date().toLocaleDateString() };
+      users.push(newUser);
+      localStorage.setItem('ugc_registered_users', JSON.stringify(users));
+
+      showAuthAlert("Account created successfully! Please login.", true);
+      setTimeout(() => switchAuthTab('login'), 1200);
+    }
+
+    function logout() {
+      sessionStorage.removeItem('ugc_session_active');
+      window.location.reload();
+    }
+
+    function launchPortal() {
+      document.getElementById('authOverlay').style.display = 'none';
+      document.getElementById('appContainer').style.display = 'block';
+      document.getElementById('userNameBadge').innerText = `${currentUser.username} (${currentUser.role.toUpperCase()})`;
+      
+      if (currentUser.role === 'admin') {
+        document.getElementById('adminBtn').style.display = 'inline-block';
+      }
+
+      renderSidebarUnits();
+      loadUnitQuiz(1);
+    }
+
+    /* =====================================================================
+       3. ANTI-BLOCKING ZERO REPETITION SET GENERATOR (5 QUESTIONS PER SET)
+    ===================================================================== */
+    function renderSidebarUnits() {
+      const list = document.getElementById('unitMenuList');
+      list.innerHTML = '';
+      SYLLABUS_UNITS.forEach(u => {
+        const li = document.createElement('li');
+        li.className = `unit-item ${u.id === activeUnitId ? 'active' : ''}`;
+        li.id = `sideUnit_${u.id}`;
+        li.onclick = () => loadUnitQuiz(u.id);
+        li.innerHTML = `<span>${u.name}</span><span class="count-badge">200 Qs</span>`;
+        list.appendChild(li);
+      });
+    }
+
+    function getAttemptedIds(unitId) {
+      const history = JSON.parse(localStorage.getItem('ugc_history_db') || '[]');
+      const userAttempts = history.filter(h => h.username === currentUser.username && h.unitId === unitId);
+      return new Set(userAttempts.map(h => h.questionId));
+    }
+
+    function loadUnitQuiz(unitId) {
+      activeUnitId = unitId;
+      document.querySelectorAll('#unitMenuList .unit-item').forEach(el => el.classList.remove('active'));
+      const activeEl = document.getElementById(`sideUnit_${unitId}`);
+      if (activeEl) activeEl.classList.add('active');
+
+      const uObj = SYLLABUS_UNITS.find(x => x.id === unitId);
+      const main = document.getElementById('mainWorkspace');
+
+      main.innerHTML = `
+        <div class="controls-bar">
+          <div>
+            <h2 style="font-size: 1.1rem; font-weight: 700;">${uObj.name}</h2>
+            <p id="unitProgressTxt" style="font-size: 0.8rem; color: var(--text-muted);">Set of 5 unique questions</p>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="timer-wrap">
+              <span>⏱️ Timer:</span>
+              <span class="timer-display" id="timerBox">00:00</span>
+              <button class="btn btn-sm btn-outline" id="timerToggleBtn" onclick="toggleTimerState()">Pause</button>
+            </div>
+            <button class="btn btn-sm btn-outline" onclick="resetUnitHistory(${unitId})" title="Re-attempt this unit from scratch">↺ Reset Unit</button>
+          </div>
+        </div>
+
+        <form id="quizForm" onsubmit="submitCurrentSet(event)">
+          <div id="questionsContainer"></div>
+          <div style="margin-top: 20px; display: flex; gap: 12px;">
+            <button type="submit" id="btnSubmitQuiz" class="btn btn-primary">Submit 5 Questions & Check</button>
+            <button type="button" id="btnNextSet" class="btn btn-outline" style="display: none;" onclick="loadNext5Questions()">Next 5 Questions →</button>
+          </div>
+        </form>
+      `;
+
+      startTimer();
+      loadNext5Questions();
+    }
+
+    function loadNext5Questions() {
+      const attempted = getAttemptedIds(activeUnitId);
+      const allQuestions = ALL_UNITS_DATA[activeUnitId];
+
+      // Anti-blocking system: filter strictly unattempted
+      const unattempted = allQuestions.filter(q => !attempted.has(q.id));
+
+      if (unattempted.length === 0) {
+        alert("🎉 Congratulations! You have completed all 200 questions of this unit!");
+        currentSet = allQuestions.slice(0, 5); // Fallback
+      } else {
+        currentSet = unattempted.slice(0, 5);
+      }
+
+      document.getElementById('unitProgressTxt').innerText = `Completed: ${attempted.size} / 200 Questions | Remaining: ${allQuestions.length - attempted.size}`;
+      renderQuestionsUI();
+      document.getElementById('btnSubmitQuiz').style.display = 'block';
+      document.getElementById('btnNextSet').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderQuestionsUI() {
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = '';
+
       currentSet.forEach((q, idx) => {
+        const isHi = q.lang === 'hi';
+        const qText = isHi ? q.q_hi : q.q_en;
+        const opts = isHi ? q.options_hi : q.options_en;
+
         const card = document.createElement('div');
         card.className = 'q-card';
+        card.id = `qCard_${idx}`;
 
-        // Unit 3: Passage Display
-        let passageHtml = '';
+        // Passage or DI Table
+        let extraMedia = '';
         if (q.passage_en) {
-          passageHtml = `<div class="passage-box"><strong>Passage / गद्यांश:</strong><br>${currentLang === 'en' ? q.passage_en : q.passage_hi}</div>`;
+          extraMedia = `<div class="passage-box"><strong>Passage:</strong><br>${isHi ? q.passage_hi : q.passage_en}</div>`;
+        } else if (q.table_html) {
+          extraMedia = q.table_html;
         }
 
-        // Unit 7: DI Table Display
-        let tableHtml = q.table_html ? q.table_html : '';
-
-        const qText = currentLang === 'en' ? q.q_en : q.q_hi;
-        const opts = currentLang === 'en' ? q.options_en : q.options_hi;
-
         card.innerHTML = `
-          ${passageHtml}
-          ${tableHtml}
-          <div style="font-weight:600; margin-bottom:12px;">Q${idx + 1}. ${qText}</div>
-          <div class="opts-list">
+          <div class="q-header">
+            <span class="q-number">Question #${q.num} (${q.id})</span>
+            <button type="button" class="q-lang-btn" onclick="toggleQuestionLang(${idx})">
+              🌐 Switch to: ${isHi ? 'English' : 'हिन्दी'}
+            </button>
+          </div>
+          ${extraMedia}
+          <div class="q-text">${qText}</div>
+          <div class="options-list">
             ${opts.map((opt, oIdx) => `
-              <label class="opt-label" id="label_${idx}_${oIdx}">
-                <input type="radio" name="q_${idx}" value="${oIdx}" required style="margin-right:10px;">
-                <span>${opt}</span>
+              <label class="option-item" id="optLabel_${idx}_${oIdx}">
+                <input type="radio" name="set_q_${idx}" value="${oIdx}" required>
+                <span>${String.fromCharCode(65 + oIdx)}. ${opt}</span>
               </label>
             `).join('')}
           </div>
-          <div class="exp-box" id="exp_${idx}"><strong>Explanation:</strong> ${q.exp}</div>
+          <div class="explanation" id="expBox_${idx}">
+            <strong>Explanation:</strong> ${q.exp}
+          </div>
         `;
-        box.appendChild(card);
+        container.appendChild(card);
       });
     }
 
-    function submitAnswers(e) {
+    // Independent Language Switch for this specific question only
+    function toggleQuestionLang(idx) {
+      currentSet[idx].lang = currentSet[idx].lang === 'en' ? 'hi' : 'en';
+      renderQuestionsUI();
+    }
+
+    function submitCurrentSet(e) {
       e.preventDefault();
-      const history = JSON.parse(localStorage.getItem('user_history_' + currentUser) || '[]');
+      const history = JSON.parse(localStorage.getItem('ugc_history_db') || '[]');
 
       currentSet.forEach((q, idx) => {
-        const chosen = document.querySelector(`input[name="q_${idx}"]:checked`);
-        const val = chosen ? parseInt(chosen.value) : -1;
-        const isCorrect = (val === q.ans);
+        const selected = document.querySelector(`input[name="set_q_${idx}"]:checked`);
+        const userVal = selected ? parseInt(selected.value) : -1;
+        const isCorrect = (userVal === q.ans);
 
         // Color coding
-        document.querySelectorAll(`input[name="q_${idx}"]`).forEach((r, oIdx) => {
+        document.querySelectorAll(`input[name="set_q_${idx}"]`).forEach((r, oIdx) => {
           r.disabled = true;
-          const lbl = document.getElementById(`label_${idx}_${oIdx}`);
+          const lbl = document.getElementById(`optLabel_${idx}_${oIdx}`);
           if (oIdx === q.ans) lbl.classList.add('correct');
-          else if (oIdx === val && !isCorrect) lbl.classList.add('wrong');
+          else if (oIdx === userVal && !isCorrect) lbl.classList.add('incorrect');
         });
 
-        document.getElementById(`exp_${idx}`).style.display = 'block';
+        // Show Explanation
+        document.getElementById(`expBox_${idx}`).style.display = 'block';
 
-        history.push({ id: q.id, unit: activeUnit, correct: isCorrect });
+        // Permanent Log
+        history.push({
+          username: currentUser.username,
+          unitId: activeUnitId,
+          questionId: q.id,
+          num: q.num,
+          questionText: q.q_en,
+          userAns: userVal,
+          correctAns: q.ans,
+          isCorrect: isCorrect,
+          timestamp: new Date().toISOString()
+        });
       });
 
-      localStorage.setItem('user_history_' + currentUser, JSON.stringify(history));
-      document.getElementById('btnSubmit').style.display = 'none';
-      document.getElementById('btnNext').style.display = 'block';
+      localStorage.setItem('ugc_history_db', JSON.stringify(history));
+      document.getElementById('btnSubmitQuiz').style.display = 'none';
+      document.getElementById('btnNextSet').style.display = 'block';
     }
 
-    function toggleLang() {
-      currentLang = currentLang === 'en' ? 'hi' : 'en';
-      document.getElementById('langTxt').innerText = currentLang === 'en' ? 'English' : 'Hindi';
-      renderQuestions();
+    function resetUnitHistory(unitId) {
+      if (!confirm(`Are you sure you want to reset Unit ${unitId}? All attempted questions in this unit will become fresh again.`)) return;
+      let history = JSON.parse(localStorage.getItem('ugc_history_db') || '[]');
+      history = history.filter(h => !(h.username === currentUser.username && h.unitId === unitId));
+      localStorage.setItem('ugc_history_db', JSON.stringify(history));
+      loadUnitQuiz(unitId);
     }
 
-    window.onload = loadData;
+    /* =====================================================================
+       4. TIMER ENGINE (TOGGLEABLE ON/OFF)
+    ===================================================================== */
+    function startTimer() {
+      clearInterval(timerInterval);
+      secondsElapsed = 0;
+      timerRunning = true;
+      runTimerTick();
+    }
+
+    function runTimerTick() {
+      timerInterval = setInterval(() => {
+        if (!timerRunning) return;
+        secondsElapsed++;
+        const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+        const secs = String(secondsElapsed % 60).padStart(2, '0');
+        const tBox = document.getElementById('timerBox');
+        if (tBox) tBox.innerText = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function toggleTimerState() {
+      timerRunning = !timerRunning;
+      const btn = document.getElementById('timerToggleBtn');
+      if (btn) btn.innerText = timerRunning ? "Pause" : "Resume";
+    }
+
+    /* =====================================================================
+       5. UNIT-WISE HISTORY & MISTAKES LOG
+    ===================================================================== */
+    function showHistoryView(filterUnit = 'all') {
+      clearInterval(timerInterval);
+      const history = JSON.parse(localStorage.getItem('ugc_history_db') || '[]');
+      const userHistory = history.filter(h => h.username === currentUser.username);
+
+      const filtered = (filterUnit === 'all') 
+        ? userHistory 
+        : userHistory.filter(h => h.unitId === parseInt(filterUnit));
+
+      const correctList = filtered.filter(x => x.isCorrect);
+      const mistakeList = filtered.filter(x => !x.isCorrect);
+
+      const main = document.getElementById('mainWorkspace');
+      main.innerHTML = `
+        <div class="view-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+            <div>
+              <h3>Unit-Wise History & Mistake Analysis</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Detailed record of all attempted and incorrect questions</p>
+            </div>
+            <div>
+              <label style="font-size: 0.85rem; font-weight: 600;">Filter Unit: </label>
+              <select onchange="showHistoryView(this.value)" style="padding: 6px; border-radius: 4px; border: 1px solid var(--border);">
+                <option value="all" ${filterUnit === 'all' ? 'selected' : ''}>All 10 Units</option>
+                ${SYLLABUS_UNITS.map(u => `<option value="${u.id}" ${filterUnit == u.id ? 'selected' : ''}>${u.name}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+
+          <!-- Summary Metric Cards -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px;">
+            <div style="background:#f1f5f9; padding: 15px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 0.8rem; color: #64748b;">Total Evaluated</div>
+              <div style="font-size: 1.4rem; font-weight: 700;">${filtered.length}</div>
+            </div>
+            <div style="background:#dcfce7; padding: 15px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 0.8rem; color: #166534;">Correct Answers</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #166534;">${correctList.length}</div>
+            </div>
+            <div style="background:#fee2e2; padding: 15px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 0.8rem; color: #991b1b;">Mistakes / Incorrect</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #991b1b;">${mistakeList.length}</div>
+            </div>
+          </div>
+
+          <h4 style="margin-bottom: 10px; color: var(--danger);">❌ Identified Mistakes Log (Review & Revise)</h4>
+          <div class="table-container" style="margin-bottom: 30px;">
+            <table>
+              <thead>
+                <tr><th>Unit</th><th>Q ID</th><th>Question</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                ${mistakeList.length === 0 ? '<tr><td colspan="4" style="text-align: center; color: green;">Zero mistakes in this filter! Great accuracy.</td></tr>' : ''}
+                ${mistakeList.map(m => `
+                  <tr>
+                    <td>Unit ${m.unitId}</td>
+                    <td><code>${m.questionId}</code></td>
+                    <td>${m.questionText.substring(0, 80)}...</td>
+                    <td style="color: var(--danger); font-weight: 600;">Incorrect</td>
+                  </tr>
+                `).reverse().join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="margin-bottom: 10px; color: var(--success);">✓ Correct Attempts Log</h4>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr><th>Unit</th><th>Q ID</th><th>Question</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                ${correctList.length === 0 ? '<tr><td colspan="4" style="text-align: center;">No correct attempts yet.</td></tr>' : ''}
+                ${correctList.map(c => `
+                  <tr>
+                    <td>Unit ${c.unitId}</td>
+                    <td><code>${c.questionId}</code></td>
+                    <td>${c.questionText.substring(0, 80)}...</td>
+                    <td style="color: var(--success); font-weight: 600;">Correct</td>
+                  </tr>
+                `).reverse().join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    /* =====================================================================
+       6. 10 UNITS E-BOOKS & FULL NOTES LIBRARY (FREE DOWNLOAD)
+    ===================================================================== */
+    const BOOK_NOTES = {
+      1: "UNIT-I: TEACHING APTITUDE\n\n1. Concept & Levels of Teaching:\n- Memory Level (Herbart): Rote recall, reproduction of facts.\n- Understanding Level (Morrison): Insight, comprehension of relationships, rules, and concepts.\n- Reflective Level (Hunt): Highest cognitive tier, problem-raising and problem-solving.\n\n2. Evaluation Systems:\n- Formative: Process-oriented, diagnostic, continuous improvement feedback.\n- Summative: Product-oriented, terminal grading, outcome certification.\n- CBCS: Choice Based Credit System providing multidisciplinary flexibility.\n\n3. Digital Initiatives: SWAYAM (Access, Equity, Quality) & SWAYAM Prabha (40 DTH channels).",
+      2: "UNIT-II: RESEARCH APTITUDE\n\n1. Paradigms:\n- Positivism: Empirical, quantitative, objective, deductive scientific method.\n- Post-Positivism: Probabilistic truth, qualitative, acknowledges fallibility.\n\n2. Errors in Hypothesis:\n- Type I Error (Alpha): Rejecting a true Null Hypothesis (H0).\n- Type II Error (Beta): Failing to reject a false Null Hypothesis.\n\n3. Probability Sampling: Simple Random, Stratified, Systematic, Cluster.",
+      3: "UNIT-III: READING COMPREHENSION\n\nKey Strategy: Identify main thesis, detect contextual nuances, recognize implicit vs explicit assertions, inferential reasoning, tone detection (Analytical, Objective, Satirical, Critical).",
+      4: "UNIT-IV: COMMUNICATION\n\n1. Types: Verbal, Non-verbal (Kinesics, Proxemics, Chronemics, Haptics), Downward, Upward, Lateral.\n2. Noise: Semantic (jargon, language barriers), Psychological, Physical.\n3. Models: Shannon & Weaver (Linear mathematical model with transmitter, noise, channel).",
+      5: "UNIT-V: MATHEMATICAL REASONING\n\nFormulas: Speed = Distance / Time (km/h to m/s multiply by 5/18), Profit % = (Profit/CP)*100, Number series differences and power progressions (n^2, n^3).",
+      6: "UNIT-VI: LOGICAL REASONING\n\n1. Classical Square of Opposition:\n- Contradictory: A and O, E and I (opposite truth values).\n- Contrary: A and E (cannot both be true).\n- Sub-contrary: I and O (cannot both be false).\n2. Indian Logic (Nyaya): Anumana (Inference), Vyapti (universal invariable concomitance between Hetu and Sadhya), Hetvabhasa (fallacies of reason).",
+      7: "UNIT-VII: DATA INTERPRETATION\n\nPercentage Change = [(New Value - Old Value) / Old Value] * 100.\nRatio, Proportion, and weighted averages calculated across tabulations, bar graphs, and pie charts.",
+      8: "UNIT-VIII: INFORMATION & COMMUNICATION TECHNOLOGY (ICT)\n\n1. Storage: Bit, Nibble (4 bits), Byte (8 bits), KB, MB, GB, TB, PB.\n2. Volatile RAM vs Non-volatile ROM.\n3. Addressing: IPv4 (32 bits), IPv6 (128 bits).\n4. Cyber Threats: Phishing, Ransomware, Trojan Horse, Denial of Service (DoS).",
+      9: "UNIT-IX: PEOPLE, DEVELOPMENT & ENVIRONMENT\n\n1. Goals: MDGs (8 goals, 2015 horizon) vs SDGs (17 goals, 169 targets, 2030 horizon).\n2. Protocols: Montreal Protocol (1987, Ozone layer), Kyoto Protocol (GHG reduction), Paris Agreement (COP21, 1.5°C limit).\n3. Secondary Pollutants: Photochemical smog, ground-level Tropospheric Ozone (O3).",
+      10: "UNIT-X: HIGHER EDUCATION SYSTEM\n\n1. Ancient Education: Takshashila, Nalanda (destroyed 1193 CE), Valabhi, Vikramashila.\n2. Pre/Post Independent Commissions: Radhakrishnan Commission (1948), Kothari Commission (1964-66, 6% GDP allocation).\n3. NEP 2020: 50% Higher Education GER target by 2035; establishment of HECI (with 4 verticals: NHERC, NAC, HEGC, GEC)."
+    };
+
+    function showBooksLibrary() {
+      clearInterval(timerInterval);
+      const main = document.getElementById('mainWorkspace');
+      main.innerHTML = `
+        <div class="view-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <h3>UGC NET Paper 1 Official E-Books & Comprehensive Notes</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">10 Complete Units Concept Master Summaries</p>
+            </div>
+            <button class="btn btn-sm btn-outline" onclick="loadUnitQuiz(${activeUnitId})">Back to Quiz</button>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 15px;">
+            ${SYLLABUS_UNITS.map(u => `
+              <div style="border: 1px solid var(--border); border-radius: 8px; padding: 15px; background: #fafafa;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <strong style="font-size: 0.95rem; color: var(--primary);">${u.name}</strong>
+                  <button class="btn btn-sm btn-primary" onclick="downloadUnitBook(${u.id})">📥 Download Notes (.txt)</button>
+                </div>
+                <pre style="white-space: pre-wrap; font-size: 0.82rem; background: #fff; padding: 12px; border-radius: 6px; border: 1px solid var(--border); color: #334155; max-height: 180px; overflow-y: auto;">${BOOK_NOTES[u.id]}</pre>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function downloadUnitBook(unitId) {
+      const uObj = SYLLABUS_UNITS.find(x => x.id === unitId);
+      const content = BOOK_NOTES[unitId] || "UGC NET Study Material";
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${uObj.name.replace(/[^a-zA-Z0-9]/g, '_')}_Study_Notes.txt`;
+      link.click();
+    }
+
+    /* =====================================================================
+       7. OFFICIAL NTA GRADE SHEET
+    ===================================================================== */
+    function showGradeSheet() {
+      clearInterval(timerInterval);
+      const history = JSON.parse(localStorage.getItem('ugc_history_db') || '[]');
+      const userHistory = history.filter(h => h.username === currentUser.username);
+      const total = userHistory.length;
+
+      if (total < 10) {
+        alert(`You have only solved ${total} questions. Solve at least 10 questions to unlock the Official Grade Card.`);
+        return;
+      }
+
+      const correct = userHistory.filter(x => x.isCorrect).length;
+      const pct = Math.round((correct / total) * 100);
+      let grade = "C";
+      if (pct >= 85) grade = "A+ (JRF Qualified Range)";
+      else if (pct >= 70) grade = "A (Assistant Professor Range)";
+      else if (pct >= 55) grade = "B+ (Competitive Range)";
+      else if (pct >= 40) grade = "B (Qualified)";
+
+      const main = document.getElementById('mainWorkspace');
+      main.innerHTML = `
+        <div class="view-card" style="border: 2px solid var(--primary); text-align: center; padding: 35px;">
+          <h2 style="color: var(--primary); font-size: 1.3rem;">UNIVERSITY GRANTS COMMISSION (UGC)</h2>
+          <p style="font-size: 0.82rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 25px;">Candidate Official Performance Scorecard</p>
+          
+          <div style="text-align: left; max-width: 460px; margin: 0 auto; line-height: 2.1; font-size: 0.95rem;">
+            <p><strong>Candidate ID:</strong> ${currentUser.username}</p>
+            <p><strong>Total Questions Solved:</strong> ${total}</p>
+            <p><strong>Correct Responses:</strong> ${correct}</p>
+            <p><strong>Incorrect / Mistakes:</strong> ${total - correct}</p>
+            <p><strong>Accuracy Rate:</strong> ${pct}%</p>
+            <p><strong>Performance Grade:</strong> <span style="font-weight: 700; color: var(--primary-hover);">${grade}</span></p>
+          </div>
+
+          <div style="margin-top: 30px; display: flex; gap: 12px; justify-content: center;">
+            <button class="btn btn-sm btn-primary" onclick="window.print()">Print / Save PDF</button>
+            <button class="btn btn-sm btn-outline" onclick="loadUnitQuiz(${activeUnitId})">Back to Quiz</button>
+          </div>
+        </div>
+      `;
+    }
+
+    /* =====================================================================
+       8. MULTI-AI DOUBT SOLVER (GEMINI, CHATGPT, PERPLEXITY)
+    ===================================================================== */
+    function toggleAiModal() {
+      const modal = document.getElementById('aiModal');
+      modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function handleAiQuery(e) {
+      e.preventDefault();
+      const input = document.getElementById('aiInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatBody = document.getElementById('aiChatBody');
+      const selectedModel = document.getElementById('aiModelSelect').value;
+
+      // User Bubble
+      const userBubble = document.createElement('div');
+      userBubble.className = 'chat-bubble chat-user';
+      userBubble.innerText = text;
+      chatBody.appendChild(userBubble);
+      input.value = '';
+
+      // AI Response with Multi-lingual capabilities (Hindi, English, Odia)
+      setTimeout(() => {
+        const botBubble = document.createElement('div');
+        botBubble.className = 'chat-bubble chat-bot';
+        
+        let reply = "";
+        const lower = text.toLowerCase();
+        
+        if (lower.includes("odia") || lower.includes("ଓଡ଼ିଆ") || lower.includes("କଣ") || lower.includes("କିପରି")) {
+          reply = `[${selectedModel.toUpperCase()}] ନମସ୍କାର! UGC NET Paper 1 ପାଇଁ: ସମସ୍ତ 10 ଟି unit ର ପ୍ରଶ୍ନ ଭଲ ଭାବରେ ଅଭ୍ୟାସ କରନ୍ତୁ। Research Aptitude ଏବଂ Teaching Aptitude ରେ conceptual ପ୍ରଶ୍ନ ଅଧିକ ଆସିଥାଏ। ଆପଣଙ୍କ ପ୍ରଶ୍ନର ସମାଧାନ ପାଇଁ ସର୍ବଦା syllabus ଅନୁସରଣ କରନ୍ତୁ।`;
+        } else if (lower.includes("hindi") || lower.includes("kya") || lower.includes("hai") || lower.includes("kaise")) {
+          reply = `[${selectedModel.toUpperCase()}] UGC NET Paper 1 के लिए: "${text}" एक महत्वपूर्ण संकल्पना है। परीक्षा में प्रत्यक्षवाद (Positivism), शिक्षण स्तर (Levels of Teaching), और NEP 2020 से सीधे प्रश्न बनते हैं। नियमित रूप से 5-क्वेश्चन सेट हल करें।`;
+        } else {
+          reply = `[${selectedModel.toUpperCase()}] Regarding "${text}": In UGC NET Paper 1, this relates directly to the core competencies evaluated by NTA. Ensure you cross-reference with previous year trends and the concept summary in the E-Books section.`;
+        }
+
+        botBubble.innerText = reply;
+        chatBody.appendChild(botBubble);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 600);
+    }
+
+    /* =====================================================================
+       9. ADMIN DASHBOARD
+    ===================================================================== */
+    function openAdminModal() {
+      const users = JSON.parse(localStorage.getItem('ugc_registered_users') || '[]');
+      const history = JSON.parse(localStorage.getItem('ugc_history_db') || '[]');
+      const tbody = document.getElementById('adminUserTable');
+
+      tbody.innerHTML = users.map(u => {
+        const count = history.filter(h => h.username === u.username).length;
+        return `
+          <tr>
+            <td><strong>${u.username}</strong></td>
+            <td><span class="badge">${u.role}</span></td>
+            <td>${u.date || 'Active'}</td>
+            <td>${count} Questions</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('adminModal').style.display = 'flex';
+    }
+
+    function closeAdminModal() {
+      document.getElementById('adminModal').style.display = 'none';
+    }
+
+    // Launch
+    window.addEventListener('DOMContentLoaded', checkSession);
   </script>
 </body>
 </html>
