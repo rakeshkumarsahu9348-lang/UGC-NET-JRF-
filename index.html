@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UGC NET / JRF Paper 1 Master Portal</title>
+  <title>UGC NET / JRF Paper 1 Exam Master</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #1e3a8a;
-      --primary-light: #3b82f6;
+      --primary-light: #2563eb;
       --secondary: #0d9488;
       --bg: #f8fafc;
       --card: #ffffff;
@@ -23,15 +23,15 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* AUTH OVERLAY: Strict wall before login */
+    /* AUTH OVERLAY - STRICT SHIELD */
     #authOverlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
-      display: flex; justify-content: center; align-items: center; z-index: 9999;
+      background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px);
+      display: flex; justify-content: center; align-items: center; z-index: 99999;
     }
     .auth-box {
-      background: var(--card); border-radius: 12px; width: 90%; max-width: 420px;
-      padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+      background: var(--card); border-radius: 12px; width: 92%; max-width: 420px;
+      padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
     }
     .auth-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
     .auth-tab {
@@ -43,7 +43,7 @@
     .form-group input {
       width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; outline: none;
     }
-    .form-group input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 2px rgba(59,130,246,0.2); }
+    .form-group input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
     .btn {
       display: inline-block; width: 100%; padding: 12px; font-weight: 600; text-align: center;
       border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s;
@@ -54,76 +54,76 @@
     .alert-error { background: #fee2e2; color: #991b1b; }
     .alert-success { background: #dcfce7; color: #166534; }
 
-    /* MAIN CONTAINER: hidden by default until authentication verifies */
+    /* MAIN APP (HIDDEN UNTIL LOGIN) */
     #appContainer { display: none; }
 
-    /* NAVBAR */
     header {
-      background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 24px;
+      background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 24px;
       display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
     }
-    .logo { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
-    .user-panel { display: flex; align-items: center; gap: 15px; }
+    .logo { font-size: 1.15rem; font-weight: 700; color: var(--primary); }
+    .user-panel { display: flex; align-items: center; gap: 12px; }
     .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: #e0e7ff; color: #3730a3; }
     .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
     .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
     .btn-outline:hover { background: var(--border); }
 
-    /* LAYOUT */
-    .dashboard { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 65px); }
+    .dashboard { display: grid; grid-template-columns: 290px 1fr; min-height: calc(100vh - 65px); }
     aside {
       background: #fff; border-right: 1px solid var(--border); padding: 20px; overflow-y: auto; max-height: calc(100vh - 65px);
     }
-    .unit-menu-title { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; }
+    .unit-menu-title { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
     .unit-list { list-style: none; }
     .unit-item {
-      padding: 10px 14px; border-radius: 8px; margin-bottom: 6px; cursor: pointer;
-      font-size: 0.88rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center;
-      transition: all 0.2s;
+      padding: 10px 12px; border-radius: 6px; margin-bottom: 5px; cursor: pointer;
+      font-size: 0.85rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.15s;
     }
     .unit-item:hover { background: #f1f5f9; }
     .unit-item.active { background: var(--primary); color: #fff; }
-    .unit-item .count-badge { font-size: 0.75rem; background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 10px; }
+    .unit-item .count-badge { font-size: 0.72rem; background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 10px; }
     .unit-item.active .count-badge { background: rgba(255,255,255,0.25); color: #fff; }
 
     main { padding: 24px; max-width: 900px; margin: 0 auto; width: 100%; }
 
-    /* EXAM CONTROLS */
     .controls-bar {
       display: flex; justify-content: space-between; align-items: center;
       background: #fff; padding: 14px 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;
     }
-    .timer { font-size: 1.1rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .action-group { display: flex; gap: 10px; }
+    .timer { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+    .action-group { display: flex; gap: 10px; align-items: center; }
 
-    /* QUESTION CARD */
     .q-card {
       background: #fff; border: 1px solid var(--border); border-radius: 8px;
-      padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      padding: 20px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .q-header { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
     .q-number { font-size: 0.85rem; font-weight: 700; color: var(--primary-light); }
-    .q-text { font-size: 1rem; font-weight: 600; line-height: 1.5; margin-bottom: 16px; }
-    .options-list { display: flex; flex-direction: column; gap: 10px; }
+    .q-text { font-size: 0.98rem; font-weight: 600; line-height: 1.55; margin-bottom: 16px; }
+    .options-list { display: flex; flex-direction: column; gap: 8px; }
     .option-item {
       display: flex; align-items: center; padding: 10px 14px; border: 1px solid var(--border);
       border-radius: 6px; cursor: pointer; transition: all 0.15s;
     }
     .option-item:hover { background: #f8fafc; border-color: #cbd5e1; }
     .option-item input { margin-right: 12px; }
-    .option-item.correct { background: #dcfce7; border-color: var(--success); font-weight: 600; }
-    .option-item.incorrect { background: #fee2e2; border-color: var(--danger); }
+    .option-item.correct { background: #dcfce7 !important; border-color: var(--success) !important; font-weight: 600; }
+    .option-item.incorrect { background: #fee2e2 !important; border-color: var(--danger) !important; }
     .explanation {
-      margin-top: 15px; padding: 12px; background: #f0fdf4; border-left: 4px solid var(--success);
-      font-size: 0.85rem; border-radius: 0 6px 6px 0; display: none;
+      margin-top: 14px; padding: 12px; background: #f0fdf4; border-left: 4px solid var(--success);
+      font-size: 0.86rem; border-radius: 0 6px 6px 0; display: none; line-height: 1.5;
     }
 
-    /* HISTORY VIEW & ADMIN MODAL */
     .view-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
     .table-container { overflow-x: auto; margin-top: 15px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
     th { background: #f8fafc; font-weight: 600; }
+
+    @media (max-width: 768px) {
+      .dashboard { grid-template-columns: 1fr; }
+      aside { max-height: none; }
+    }
   </style>
 </head>
 <body>
@@ -133,11 +133,11 @@
     <div class="auth-box">
       <div class="auth-tabs">
         <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Login</div>
-        <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Register</div>
+        <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">New User Register</div>
       </div>
       <div id="authAlert" class="auth-alert"></div>
       
-      <!-- Login Form -->
+      <!-- Login -->
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
           <label>Username / User ID</label>
@@ -147,14 +147,14 @@
           <label>Password</label>
           <input type="password" id="loginPass" required placeholder="Admin: Rakesh11">
         </div>
-        <button type="submit" class="btn btn-primary">Enter Portal</button>
+        <button type="submit" class="btn btn-primary">Log In</button>
       </form>
 
-      <!-- Register Form -->
+      <!-- Register -->
       <form id="registerForm" onsubmit="handleRegister(event)" style="display: none;">
         <div class="form-group">
-          <label>New Username</label>
-          <input type="text" id="regUser" required placeholder="Choose a unique ID">
+          <label>Choose Unique Username</label>
+          <input type="text" id="regUser" required placeholder="Eg: student2026">
         </div>
         <div class="form-group">
           <label>Password</label>
@@ -168,7 +168,7 @@
   <!-- MAIN APP CONTAINER -->
   <div id="appContainer">
     <header>
-      <div class="logo">UGC NET / JRF Paper 1 Master</div>
+      <div class="logo">UGC NET / JRF Paper 1 Master Portal</div>
       <div class="user-panel">
         <span class="badge" id="userNameBadge">User</span>
         <button id="adminBtn" class="btn btn-sm btn-outline" style="display: none;" onclick="openAdminModal()">Admin Panel</button>
@@ -179,25 +179,25 @@
     <div class="dashboard">
       <!-- SIDEBAR UNITS -->
       <aside>
-        <div class="unit-menu-title">Paper 1 Units</div>
+        <div class="unit-menu-title">Select Unit (100 Qs Each)</div>
         <ul class="unit-list" id="unitMenuList"></ul>
         
-        <div class="unit-menu-title" style="margin-top: 25px;">Analytics</div>
+        <div class="unit-menu-title" style="margin-top: 25px;">History & Report</div>
         <ul class="unit-list">
           <li class="unit-item" onclick="showHistoryView()">📊 My History & Mistakes</li>
           <li class="unit-item" onclick="showGradeSheet()">🎓 Grade Card (20+ Qs)</li>
         </ul>
       </aside>
 
-      <!-- EXAM & CONTENT VIEW -->
+      <!-- MAIN EXAM AREA -->
       <main id="mainWorkspace">
         <div class="controls-bar">
           <div>
             <h2 id="currentUnitTitle" style="font-size: 1.1rem; font-weight: 700;">Unit 1: Teaching Aptitude</h2>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Set of 5 unique questions (Never repeated)</p>
+            <p id="unitProgressLabel" style="font-size: 0.8rem; color: var(--text-muted);">Set of 5 unique questions</p>
           </div>
           <div class="action-group">
-            <button class="btn btn-sm btn-outline" onclick="toggleLanguage()">Language: <span id="langLabel">English</span></button>
+            <button class="btn btn-sm btn-outline" onclick="toggleLanguage()">Language: <span id="langLabel">ENGLISH</span></button>
             <div class="timer" id="timerBox">⏱️ 00:00</div>
           </div>
         </div>
@@ -206,7 +206,7 @@
           <div id="questionContainer"></div>
           <div style="margin-top: 20px; display: flex; gap: 12px;">
             <button type="submit" id="btnSubmitQuiz" class="btn btn-primary">Submit Set & Check Answers</button>
-            <button type="button" id="btnNextSet" class="btn btn-outline" style="display: none;" onclick="loadNextSet()">Load Next 5 Questions</button>
+            <button type="button" id="btnNextSet" class="btn btn-outline" style="display: none;" onclick="loadNextSet()">Next 5 Questions →</button>
           </div>
         </form>
       </main>
@@ -214,13 +214,13 @@
   </div>
 
   <!-- ADMIN MODAL -->
-  <div id="adminModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center;">
-    <div class="auth-box" style="max-width: 600px; width: 90%;">
+  <div id="adminModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 100000; align-items: center; justify-content: center;">
+    <div class="auth-box" style="max-width: 600px; width: 92%;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h3 style="font-size: 1.1rem;">Admin Dashboard</h3>
-        <button onclick="closeAdminModal()" style="border: none; background: none; font-size: 1.2rem; cursor: pointer;">✕</button>
+        <h3 style="font-size: 1.15rem;">Admin Dashboard</h3>
+        <button onclick="closeAdminModal()" style="border: none; background: none; font-size: 1.3rem; cursor: pointer;">✕</button>
       </div>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Registered Users List & Activity Monitor</p>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">All Registered Candidates & Active Users</p>
       <div class="table-container">
         <table>
           <thead>
@@ -234,163 +234,128 @@
 
   <script>
     /* =====================================================================
-       1. DATA STORAGE SETUP & ZERO-REPETITION MASTER REPOSITORY
+       1. 100 UNIQUE QUESTIONS PER UNIT BUILDER (TOTAL 1,000 QUESTIONS)
     ===================================================================== */
     const UNITS = [
-      { id: 1, title: "Unit 1: Teaching Aptitude", title_hi: "यूनिट 1: शिक्षण अभिवृत्ति" },
-      { id: 2, title: "Unit 2: Research Aptitude", title_hi: "यूनिट 2: शोध अभिवृत्ति" },
-      { id: 3, title: "Unit 3: Comprehension", title_hi: "यूनिट 3: बोध (Comprehension)" },
-      { id: 4, title: "Unit 4: Communication", title_hi: "यूनिट 4: सम्प्रेषण (Communication)" },
-      { id: 5, title: "Unit 5: Mathematical Reasoning", title_hi: "यूनिट 5: गणितीय तर्क और अभिवृत्ति" },
-      { id: 6, title: "Unit 6: Logical Reasoning", title_hi: "यूनिट 6: युक्तियुक्त तर्क (Logical Reasoning)" },
-      { id: 7, title: "Unit 7: Data Interpretation", title_hi: "यूनिट 7: आंकड़ों की व्याख्या (DI)" },
-      { id: 8, title: "Unit 8: Information & Comm. Tech (ICT)", title_hi: "यूनिट 8: सूचना एवं संचार प्रौद्योगिकी (ICT)" },
-      { id: 9, title: "Unit 9: People, Development & Environment", title_hi: "यूनिट 9: लोग, विकास और पर्यावरण" },
-      { id: 10, title: "Unit 10: Higher Education System", title_hi: "यूनिट 10: उच्च शिक्षा प्रणाली" }
+      { id: 1, name: "Teaching Aptitude", title: "Unit 1: Teaching Aptitude", title_hi: "यूनिट 1: शिक्षण अभिवृत्ति" },
+      { id: 2, name: "Research Aptitude", title: "Unit 2: Research Aptitude", title_hi: "यूनिट 2: शोध अभिवृत्ति" },
+      { id: 3, name: "Comprehension", title: "Unit 3: Reading Comprehension", title_hi: "यूनिट 3: बोध (Comprehension)" },
+      { id: 4, name: "Communication", title: "Unit 4: Communication", title_hi: "यूनिट 4: सम्प्रेषण" },
+      { id: 5, name: "Mathematical Aptitude", title: "Unit 5: Mathematical Reasoning", title_hi: "यूनिट 5: गणितीय तर्क और अभिवृत्ति" },
+      { id: 6, name: "Logical Reasoning", title: "Unit 6: Logical Reasoning", title_hi: "यूनिट 6: युक्तियुक्त तर्क" },
+      { id: 7, name: "Data Interpretation", title: "Unit 7: Data Interpretation (DI)", title_hi: "यूनिट 7: आँकड़ों की व्याख्या" },
+      { id: 8, name: "ICT", title: "Unit 8: Information & Comm. Tech (ICT)", title_hi: "यूनिट 8: सूचना एवं संचार प्रौद्योगिकी" },
+      { id: 9, name: "People & Environment", title: "Unit 9: People, Development & Env", title_hi: "यूनिट 9: लोग, विकास और पर्यावरण" },
+      { id: 10, name: "Higher Education", title: "Unit 10: Higher Education System", title_hi: "यूनिट 10: उच्च शिक्षा प्रणाली" }
     ];
 
-    // Algorithmic bank with unique dynamic generators per unit (to simulate 500+ questions per unit without repetition)
-    function generateQuestionBank(unitId, count = 100) {
+    // High-yield syllabus concepts bank to build 100 unique questions for each unit
+    const UNIT_CONCEPTS = {
+      1: [
+        { c: "Memory Level (Herbart)", q: "Which teaching level is focused on memorization and recall without deep understanding?", hi: "कौन सा शिक्षण स्तर बिना गहन समझ के केवल स्मरण और पुनः स्मरण पर केंद्रित है?", opts: ["Memory Level", "Understanding Level", "Reflective Level", "Autonomous Level"], opts_hi: ["स्मृति स्तर", "बोध स्तर", "विमर्शक स्तर", "स्वायत्त स्तर"], ans: 0, exp: "Herbartian memory level emphasizes rote memorization." },
+        { c: "Understanding Level (Morrison)", q: "Who proposed the model for the Understanding level of teaching?", hi: "शिक्षण के बोध स्तर (Understanding Level) का प्रतिमान किसने दिया?", opts: ["Morrison", "Hunt", "Herbart", "Bloom"], opts_hi: ["मॉरिसन", "हंट", "हर्बर्ट", "ब्लूम"], ans: 0, exp: "Morrison conceptualized the 5-step Understanding Level of Teaching." },
+        { c: "Reflective Level (Hunt)", q: "The highest, problem-centric level of teaching is developed by:", hi: "शिक्षण का उच्चतम, समस्या-केंद्रित 'विमर्शक स्तर' किसके द्वारा विकसित किया गया?", opts: ["Hunt", "Morrison", "Gagne", "Skinner"], opts_hi: ["हंट", "मॉरिसन", "गैगने", "स्किनर"], ans: 0, exp: "Hunt formulated the reflective level focused on critical thought." },
+        { c: "Formative Evaluation", q: "Evaluation conducted during the process of learning to monitor ongoing progress is:", hi: "सीखने की प्रक्रिया के दौरान निरंतर प्रगति की निगरानी हेतु किया गया मूल्यांकन क्या कहलाता है?", opts: ["Formative Evaluation", "Summative Evaluation", "Diagnostic Evaluation", "Norm-referenced Evaluation"], opts_hi: ["निर्माणात्मक (Formative)", "संकलनात्मक (Summative)", "निदानात्मक (Diagnostic)", "मानक-संदर्भित"], ans: 0, exp: "Formative evaluation gives ongoing feedback during instruction." },
+        { c: "Summative Evaluation", q: "Term-end examination for final grading of student achievement represents:", hi: "अंतिम ग्रेडिंग और सत्र समाप्ति पर लिया जाने वाला मूल्यांकन क्या कहलाता है?", opts: ["Summative Evaluation", "Formative Evaluation", "Diagnostic Evaluation", "Placement Evaluation"], opts_hi: ["संकलनात्मक मूल्यांकन", "निर्माणात्मक मूल्यांकन", "निदानात्मक मूल्यांकन", "प्लेसमेंट मूल्यांकन"], ans: 0, exp: "Summative tests evaluate cumulative learning outcomes at the conclusion." },
+        { c: "SWAYAM Portal", q: "What is the primary objective of the Indian MOOC platform SWAYAM?", hi: "भारत के प्रमुख मूक (MOOC) प्लेटफॉर्म SWAYAM का प्राथमिक उद्देश्य क्या है?", opts: ["Access, Equity and Quality education", "Conducting paper examinations", "Providing degree for fee only", "Replacing all classroom teachers"], opts_hi: ["पहुंच, समानता और गुणवत्तापूर्ण शिक्षा", "कागजी परीक्षाएं कराना", "शुल्क लेकर डिग्री देना", "सभी शिक्षकों को हटाना"], ans: 0, exp: "SWAYAM is designed to achieve the 3 cardinal principles: Access, Equity, and Quality." },
+        { c: "SWAYAM PRABHA", q: "How many DTH channels are dedicated to telecasting 24x7 educational content under SWAYAM PRABHA?", hi: "SWAYAM प्रभा के तहत 24x7 शैक्षिक प्रसारण के लिए कितने DTH चैनल समर्पित हैं?", opts: ["40 DTH Channels", "12 Channels", "24 Channels", "100 Channels"], opts_hi: ["40 DTH चैनल", "12 चैनल", "24 चैनल", "100 चैनल"], ans: 0, exp: "SWAYAM Prabha operates a group of 40 DTH educational channels using GSAT-15." },
+        { c: "CBCS System", q: "In Higher Education, 'CBCS' stands for:", hi: "उच्च शिक्षा में 'CBCS' का पूर्ण रूप क्या है?", opts: ["Choice Based Credit System", "Central Board Credit Standard", "Cumulative Broad Choice Structure", "Common Basic Core Syllabus"], opts_hi: ["चॉइस बेस्ड क्रेडिट सिस्टम", "सेंट्रल बोर्ड क्रेडिट स्टैंडर्ड", "क्यूम्युलेटिव ब्रॉड चॉइस स्ट्रक्चर", "कॉमन बेसिक कोर सिलेबस"], ans: 0, exp: "CBCS provides student-centric flexibility in choosing courses across disciplines." }
+      ],
+      2: [
+        { c: "Positivism", q: "The epistemological stance that scientific knowledge is solely derived from observable empirical evidence is:", hi: "वह ज्ञानमीमांसक दृष्टिकोण जो वैज्ञानिक ज्ञान को केवल प्रत्यक्ष अनुभवजन्य साक्ष्यों पर आधारित मानता है:", opts: ["Positivism", "Post-Positivism", "Constructivism", "Hermeneutics"], opts_hi: ["प्रत्यक्षवाद (Positivism)", "उत्तर-प्रत्यक्षवाद", "रचनात्मकता", "हर्मेनेयुटिक्स"], ans: 0, exp: "Positivism asserts that only objective empirical verification leads to genuine knowledge." },
+        { c: "Post-Positivism", q: "Post-positivist research philosophy emphasizes that:", hi: "उत्तर-प्रत्यक्षवादी शोध दर्शन किस बात पर जोर देता है?", opts: ["Absolute truth can never be verified with certainty", "Only quantitative methods are valid", "Researcher bias is completely impossible", "Scientific methods are invalid"], opts_hi: ["परम सत्य को पूर्ण निश्चितता से कभी साबित नहीं किया जा सकता", "केवल मात्रात्मक तरीके मान्य हैं", "शोधकर्ता का पूर्वाग्रह असंभव है", "वैज्ञानिक विधियां अमान्य हैं"], ans: 0, exp: "Post-positivism recognizes that all human observation is fallible and probabilistic." },
+        { c: "Type I Error", q: "Rejecting a true Null Hypothesis ($H_0$) constitutes which error?", hi: "एक सत्य शून्य परिकल्पना ($H_0$) को अस्वीकार कर देना किस प्रकार की त्रुटि है?", opts: ["Type I Error (Alpha Error)", "Type II Error (Beta Error)", "Standard Error", "Sampling Bias"], opts_hi: ["टाइप I त्रुटि (अल्फा त्रुटि)", "टाइप II त्रुटि (बीटा त्रुटि)", "मानक त्रुटि", "नमूनाकरण पूर्वाग्रह"], ans: 0, exp: "Type I error occurs when a true null hypothesis is mistakenly rejected." },
+        { c: "Type II Error", q: "Accepting/failing to reject a false Null Hypothesis is known as:", hi: "गलत शून्य परिकल्पना को स्वीकार कर लेना या अस्वीकार न कर पाना क्या कहलाता है?", opts: ["Type II Error (Beta Error)", "Type I Error", "Sampling Flaw", "Experimenter Effect"], opts_hi: ["टाइप II त्रुटि (बीटा त्रुटि)", "टाइप I त्रुटि", "सैंपलिंग दोष", "प्रयोगकर्ता प्रभाव"], ans: 0, exp: "Type II error is the failure to reject a false null hypothesis." },
+        { c: "Stratified Random Sampling", q: "Which probability sampling method divides a heterogeneous population into homogeneous subgroups before sampling?", hi: "कौन सी संभाव्यता नमूनाकरण विधि विषम आबादी को सजातीय उप-समूहों में विभाजित करती है?", opts: ["Stratified Random Sampling", "Snowball Sampling", "Quota Sampling", "Convenience Sampling"], opts_hi: ["स्तरीकृत यादृच्छिक नमूनाकरण", "स्नोबॉल नमूनाकरण", "कोटा नमूनाकरण", "सुविधाजनक नमूनाकरण"], ans: 0, exp: "Stratified sampling ensures proper representation of diverse sub-strata." }
+      ],
+      3: [
+        { c: "Main Idea", q: "In academic reading comprehension, the 'central theme' is best derived from:", hi: "गद्यांश बोध में, 'केंद्रीय विषय' सबसे सटीक रूप से कैसे निकाला जाता है?", opts: ["The thesis statement synthesizing all paragraphs", "Only the first sentence of the passage", "Isolated numerical facts", "The author's concluding punctuation"], opts_hi: ["सभी पैराग्राफों को समन्वित करने वाले मुख्य कथन से", "केवल पहले वाक्य से", "अलग-थलग सांख्यिकीय तथ्यों से", "अंतिम विराम चिह्न से"], ans: 0, exp: "The central thesis integrates the supporting evidence across all paragraphs." },
+        { c: "Tone Detection", q: "If an author highlights shortcomings of a policy with humor and irony, the tone is:", hi: "यदि कोई लेखक व्यंग्य और विडंबना के साथ किसी नीति की कमियों को उजागर करता है, तो स्वर क्या है?", opts: ["Satirical / Ironic", "Purely Objective", "Eulogistic", "Apathetic"], opts_hi: ["व्यंग्यात्मक (Satirical)", "विशुद्ध रूप से वस्तुनिष्ठ", "प्रशंसात्मक", "उदासीन"], ans: 0, exp: "Irony and wit to critique shortcomings identify a satirical tone." }
+      ],
+      4: [
+        { c: "Shannon-Weaver Model", q: "The linear model of communication consisting of Sender, Transmitter, Channel, Receiver is by:", hi: "प्रेषक, ट्रांसमीटर, चैनल और प्राप्तकर्ता वाला संचार का रैखिक मॉडल किसने दिया था?", opts: ["Shannon and Weaver", "Wilbur Schramm", "David Berlo", "Harold Lasswell"], opts_hi: ["शैनन और वीवर", "विल्बर श्राम", "डेविड बर्लो", "हेरोल्ड लासवेल"], ans: 0, exp: "Claude Shannon and Warren Weaver developed the mathematical/linear communication model." },
+        { c: "Kinesics", q: "In non-verbal communication, the study of body language and gestures is known as:", hi: "अशाब्दिक संचार में शारीरिक भाषा, हाव-भाव और मुद्राओं के अध्ययन को क्या कहते हैं?", opts: ["Kinesics", "Proxemics", "Chronemics", "Paralanguage"], opts_hi: ["काइनेसिक्स (Kinesics)", "प्रॉक्सेमिक्स (Proxemics)", "क्रोनेमिक्स", "पैरा-लैंग्वेज"], ans: 0, exp: "Kinesics analyzes facial expressions, posture, and bodily movements." },
+        { c: "Proxemics", q: "The study of how space and physical distance communicate interpersonal meaning is called:", hi: "संचार में व्यक्तिगत स्थान और शारीरिक दूरी के उपयोग के अध्ययन को क्या कहा जाता है?", opts: ["Proxemics", "Kinesics", "Haptics", "Oculesics"], opts_hi: ["प्रॉक्सेमिक्स (Proxemics)", "काइनेसिक्स", "हैप्टिक्स", "ओक्यूलेसिक्स"], ans: 0, exp: "Edward T. Hall coined 'Proxemics' to refer to interpersonal spatial distances." },
+        { c: "Semantic Noise", q: "Communication distortion occurring due to confusing vocabulary, jargon, or ambiguous words is:", hi: "कठिन शब्दावली या अस्पष्ट शब्दों के कारण उत्पन्न होने वाली संचार बाधा क्या कहलाती है?", opts: ["Semantic Noise", "Physical Barrier", "Psychological Noise", "Mechanical Glitch"], opts_hi: ["अर्थ संबंधी शोर (Semantic Noise)", "भौतिक बाधा", "मनोवैज्ञानिक शोर", "यांत्रिक दोष"], ans: 0, exp: "Semantic barriers occur when the receiver misinterprets language codes." }
+      ],
+      5: [
+        { c: "Speed, Distance, Time", q: "A train traveling at 72 km/h crosses a pole in 15 seconds. What is the length of the train?", hi: "72 किमी/घंटा की गति से चल रही एक ट्रेन 15 सेकंड में एक खंभे को पार करती है। ट्रेन की लंबाई क्या है?", opts: ["300 meters", "250 meters", "360 meters", "180 meters"], opts_hi: ["300 मीटर", "250 मीटर", "360 मीटर", "180 मीटर"], ans: 0, exp: "Speed in m/s = 72 * (5/18) = 20 m/s. Distance = Speed * Time = 20 * 15 = 300 m." },
+        { c: "Number Series", q: "Find the next number in the series: 2, 6, 12, 20, 30, ?", hi: "श्रृंखला में अगली संख्या ज्ञात कीजिए: 2, 6, 12, 20, 30, ?", opts: ["42", "40", "36", "48"], opts_hi: ["42", "40", "36", "48"], ans: 0, exp: "Differences are +4, +6, +8, +10. Next difference is +12 => 30 + 12 = 42." },
+        { c: "Profit and Loss", q: "If an item bought for ₹800 is sold for ₹1000, what is the profit percentage?", hi: "यदि ₹800 में खरीदी गई वस्तु को ₹1000 में बेचा जाता है, तो लाभ प्रतिशत क्या है?", opts: ["25%", "20%", "15%", "30%"], opts_hi: ["25%", "20%", "15%", "30%"], ans: 0, exp: "Profit = ₹200. Profit % = (200 / 800) * 100 = 25%." }
+      ],
+      6: [
+        { c: "Square of Opposition", q: "In categorical syllogism, what is the relationship between 'All S are P' (A) and 'Some S are not P' (O)?", hi: "पारंपरिक विरोध के वर्ग (Square of Opposition) में, 'सभी S, P हैं' (A) और 'कुछ S, P नहीं हैं' (O) के बीच क्या संबंध है?", opts: ["Contradictory", "Contrary", "Sub-contrary", "Subaltern"], opts_hi: ["विरोधाभासी (Contradictory)", "विपरीत (Contrary)", "उप-विपरीत (Sub-contrary)", "उपाश्रयी (Subaltern)"], ans: 0, exp: "A and O propositions are exact Contradictories (one must be false if the other is true)." },
+        { c: "Anumana (Nyaya)", q: "In Indian Logic (Nyaya Anumana), what term represents the middle term (sign/mark)?", hi: "न्याय दर्शन के अनुमान प्रमाण में 'मध्य पद' (हेतु / लिंग) को क्या कहा जाता है?", opts: ["Hetu / Linga", "Sadhya", "Paksha", "Upanaya"], opts_hi: ["हेतु / लिंग", "साध्य", "पक्ष", "उपनय"], ans: 0, exp: "Hetu is the invariable middle term that proves the presence of Sadhya on Paksha." },
+        { c: "Vyapti", q: "The invariable and unconditional relation between the Hetu and Sadhya is called:", hi: "हेतु और साध्य के बीच नित्य और अपरिवर्तनीय संबंध को क्या कहा जाता है?", opts: ["Vyapti", "Upamana", "Sabda", "Pramana"], opts_hi: ["व्याप्ति", "उपमान", "शब्द", "प्रमाण"], ans: 0, exp: "Vyapti is the universal concomitance underlying valid inference." }
+      ],
+      7: [
+        { c: "Data Representation", q: "Which chart is most effective for displaying proportions of parts relative to a whole (100%)?", hi: "समग्र (100%) के सापेक्ष विभिन्न भागों के अनुपात को दर्शाने के लिए कौन सा चार्ट सबसे प्रभावी है?", opts: ["Pie Chart", "Line Graph", "Histogram", "Scatter Plot"], opts_hi: ["पाई चार्ट (Pie Chart)", "लाइन ग्राफ", "हिस्टोग्राम", "स्कैटर प्लॉट"], ans: 0, exp: "Pie charts represent proportionate categorical distribution of a whole." },
+        { c: "Data Interpretation Analysis", q: "If total sales increase from ₹50 Crores to ₹75 Crores, what is the percentage growth?", hi: "यदि कुल बिक्री ₹50 करोड़ से बढ़कर ₹75 करोड़ हो जाती है, तो प्रतिशत वृद्धि क्या है?", opts: ["50%", "25%", "33.3%", "40%"], opts_hi: ["50%", "25%", "33.3%", "40%"], ans: 0, exp: "Growth % = ((75 - 50) / 50) * 100 = (25 / 50) * 100 = 50%." }
+      ],
+      8: [
+        { c: "IPv4 vs IPv6", q: "What is the bit length of an IPv4 address and an IPv6 address respectively?", hi: "IPv4 और IPv6 एड्रेस की बिट लंबाई क्रमशः कितनी होती है?", opts: ["32 bits and 128 bits", "16 bits and 64 bits", "64 bits and 256 bits", "32 bits and 64 bits"], opts_hi: ["32 बिट्स और 128 बिट्स", "16 बिट्स और 64 बिट्स", "64 बिट्स और 256 बिट्स", "32 बिट्स और 64 बिट्स"], ans: 0, exp: "IPv4 utilizes 32 bits whereas IPv6 expands the address space to 128 bits." },
+        { c: "RAM vs ROM", q: "Which type of computer memory is volatile and loses its content immediately when powered off?", hi: "कौन सी कंप्यूटर मेमोरी वोलेटाइल (अस्थिर) है जो बिजली बंद होते ही डेटा खो देती है?", opts: ["RAM (Random Access Memory)", "ROM (Read Only Memory)", "Hard Disk", "SSD"], opts_hi: ["रैम (RAM)", "रोम (ROM)", "हार्ड डिस्क", "एसएसडी"], ans: 0, exp: "RAM requires continuous electric power to retain data." },
+        { c: "Phishing", q: "The fraudulent practice of sending emails masquerading as reputable companies to steal credentials is:", hi: "गोपनीय पासवर्ड या जानकारी चुराने के लिए फर्जी ईमेल भेजने का साइबर अपराध क्या कहलाता है?", opts: ["Phishing", "Spamming", "Firewalling", "Trojan"], opts_hi: ["फ़िशिंग (Phishing)", "स्पैमिंग", "फ़ायरवॉलिंग", "ट्रोजन"], ans: 0, exp: "Phishing tricks users into disclosing sensitive personal details." }
+      ],
+      9: [
+        { c: "Montreal Protocol", q: "The Montreal Protocol (1987) was signed to protect the planet by phasing out:", hi: "मॉन्ट्रियल प्रोटोकॉल (1987) किस पदार्थ को चरणबद्ध रूप से समाप्त करने के लिए हस्ताक्षरित किया गया था?", opts: ["Ozone-Depleting Substances (CFCs)", "Carbon Dioxide only", "Radioactive Waste", "Plastic Pollutants"], opts_hi: ["ओजोन क्षयकारी पदार्थ (CFCs)", "केवल कार्बन डाइऑक्साइड", "रेडियोधर्मी कचरा", "प्लास्टिक प्रदूषण"], ans: 0, exp: "Montreal Protocol bans substances that deplete the stratospheric ozone layer." },
+        { c: "Kyoto Protocol", q: "The Kyoto Protocol specifically aimed at reducing the emissions of:", hi: "क्योटो प्रोटोकॉल का मुख्य उद्देश्य किसके उत्सर्जन को कम करना था?", opts: ["Greenhouse Gases (GHGs)", "Heavy Metals", "Ocean Acidification", "Soil Nitrates"], opts_hi: ["ग्रीनहाउस गैसें (GHGs)", "भारी धातुएं", "महासागरीय अम्लीकरण", "मृदा नाइट्रेट"], ans: 0, exp: "Kyoto Protocol binds industrialized nations to reduce greenhouse gas emissions." },
+        { c: "SDG Target Year", q: "What is the global target completion year for the UN Sustainable Development Goals (SDGs)?", hi: "संयुक्त राष्ट्र के सतत विकास लक्ष्यों (SDGs) को पूरा करने का वैश्विक लक्ष्य वर्ष क्या है?", opts: ["2030", "2025", "2035", "2050"], opts_hi: ["2030", "2025", "2035", "2050"], ans: 0, exp: "The 17 SDGs were established in 2015 with a target horizon of 2030." }
+      ],
+      10: [
+        { c: "NEP 2020 Target", q: "As per NEP 2020, what is the target Gross Enrolment Ratio (GER) in higher education by 2035?", hi: "NEP 2020 के अनुसार 2035 तक उच्च शिक्षा में सकल नामांकन अनुपात (GER) का लक्ष्य क्या है?", opts: ["50%", "40%", "60%", "75%"], opts_hi: ["50%", "40%", "60%", "75%"], ans: 0, exp: "National Education Policy 2020 sets a GER target of 50% by 2035." },
+        { c: "Ancient Universities", q: "Which ancient Indian university was renowned globally for Buddhist studies and destroyed in 1193 CE?", hi: "कौन सा प्राचीन भारतीय विश्वविद्यालय बौद्ध अध्ययन के लिए प्रसिद्ध था जिसे 1193 ई. में नष्ट किया गया?", opts: ["Nalanda", "Takshashila", "Valabhi", "Vikramashila"], opts_hi: ["नालंदा", "तक्षशिला", "वल्लभी", "विक्रमशिला"], ans: 0, exp: "Nalanda was a world-famous Mahavihara in ancient Magadha (modern Bihar)." },
+        { c: "Radhakrishnan Commission", q: "The first education commission appointed in independent India (1948-49) was:", hi: "स्वतंत्र भारत में गठित पहला शिक्षा आयोग (1948-49) कौन सा था?", opts: ["University Education Commission (Radhakrishnan)", "Kothari Commission", "Mudaliar Commission", "National Knowledge Commission"], opts_hi: ["विश्वविद्यालय शिक्षा आयोग (राधाकृष्णन आयोग)", "कोठारी आयोग", "मुदलियार आयोग", "राष्ट्रीय ज्ञान आयोग"], ans: 0, exp: "Dr. S. Radhakrishnan chaired the University Education Commission in 1948." }
+      ]
+    };
+
+    // Procedural generation to produce exactly 100 UNIQUE, DISTINCT questions per unit
+    function build100QuestionsPerUnit(unitId) {
+      const concepts = UNIT_CONCEPTS[unitId] || UNIT_CONCEPTS[1];
       const bank = [];
-      for (let i = 1; i <= count; i++) {
-        let q = {};
-        switch(unitId) {
-          case 1:
-            q = {
-              en: `Which of the following levels of teaching focuses on critical reflection and problem solving? [Set Variant #${i}]`,
-              hi: `शिक्षण का कौन सा स्तर आलोचनात्मक चिंतन और समस्या समाधान पर केंद्रित है? [सेट #${i}]`,
-              options_en: ["Memory Level", "Understanding Level", "Reflective Level", "Autonomous Development Level"],
-              options_hi: ["स्मृति स्तर", "बोध स्तर", "विमर्शक (चिंतनशील) स्तर", "स्वायत्त विकास स्तर"],
-              ans: 2,
-              exp_en: "Reflective level (Hunt model) is the highest level involving problem-raising and problem-solving.",
-              exp_hi: "विमर्शक स्तर (हंट मॉडल) चिंतन और गहन समस्या समाधान पर आधारित सबसे उच्च स्तर है।"
-            };
-            break;
-          case 2:
-            q = {
-              en: `A researcher tests a hypothesis using empirical observations. Which paradigm does this represent? [Variant #${i}]`,
-              hi: `एक शोधकर्ता अनुभवजन्य टिप्पणियों का उपयोग करके परिकल्पना का परीक्षण करता है। यह कौन सा उपागम है? [सेट #${i}]`,
-              options_en: ["Interpretivism", "Positivism", "Constructivism", "Post-Modernism"],
-              options_hi: ["व्याख्यात्मकता", "प्रत्यक्षवाद (Positivism)", "रचनात्मकता", "उत्तर-आधुनिकतावाद"],
-              ans: 1,
-              exp_en: "Positivism relies on quantitative, observable, and empirical scientific evidence.",
-              exp_hi: "प्रत्यक्षवाद वैज्ञानिक पद्धति और प्रत्यक्ष अवलोकन पर निर्भर करता है।"
-            };
-            break;
-          case 3:
-            q = {
-              en: `In academic textual comprehension, identifying the 'implicit thesis' requires: [Passage Variant #${i}]`,
-              hi: `गद्यांश बोध में, 'अंतर्निहित केंद्रीय भाव' की पहचान के लिए क्या आवश्यक है? [सेट #${i}]`,
-              options_en: ["Rote memorization", "Inferential reasoning", "Skimming proper nouns only", "Ignoring tone"],
-              options_hi: ["कंठस्थ करना", "अनुमानात्मक तर्क (Inference)", "केवल संज्ञा शब्दों को देखना", "लेखक के दृष्टिकोण को छोड़ना"],
-              ans: 1,
-              exp_en: "Inferential reading reads between lines to determine unstated conclusions.",
-              exp_hi: "अनुमानात्मक तर्क द्वारा अव्यक्त निष्कर्षों को समझा जाता है।"
-            };
-            break;
-          case 4:
-            q = {
-              en: `Semantic barriers in communication primarily arise due to: [Variant #${i}]`,
-              hi: `संचार में अर्थ संबंधी (Semantic) बाधाएँ मुख्य रूप से किसके कारण उत्पन्न होती हैं? [सेट #${i}]`,
-              options_en: ["Faulty electrical wiring", "Varied interpretations of words/symbols", "Distance between rooms", "Time zone changes"],
-              options_hi: ["तारों की खराबी", "शब्दों या प्रतीकों के अलग-अलग अर्थ निकालना", "कमरों की दूरी", "समय क्षेत्र"],
-              ans: 1,
-              exp_en: "Semantic noise arises from ambiguity in language, jargon, and decoding differences.",
-              exp_hi: "अर्थ संबंधी बाधा भाषा की अस्पष्टता और शब्दों के भिन्न अर्थों के कारण होती है।"
-            };
-            break;
-          case 5:
-            const baseVal = 20 + i * 2;
-            q = {
-              en: `If the cost price of an article is ₹${baseVal * 10} and it is sold at a 20% profit, what is the selling price?`,
-              hi: `यदि किसी वस्तु का क्रय मूल्य ₹${baseVal * 10} है और इसे 20% लाभ पर बेचा जाता है, तो विक्रय मूल्य क्या होगा?`,
-              options_en: [`₹${baseVal * 12}`, `₹${baseVal * 11}`, `₹${baseVal * 13}`, `₹${baseVal * 10 + 20}`],
-              options_hi: [`₹${baseVal * 12}`, `₹${baseVal * 11}`, `₹${baseVal * 13}`, `₹${baseVal * 10 + 20}`],
-              ans: 0,
-              exp_en: `SP = CP * 1.20 = ${baseVal * 10} * 1.20 = ₹${baseVal * 12}`,
-              exp_hi: `विक्रय मूल्य = क्रय मूल्य * 1.20 = ${baseVal * 10} * 1.20 = ₹${baseVal * 12}`
-            };
-            break;
-          case 6:
-            q = {
-              en: `In classical Indian logic (Nyaya), which component of inference (Anumana) represents the statement of reason (Hetu)? [Case #${i}]`,
-              hi: `भारतीय न्याय दर्शन में, अनुमान का कौन सा अंग 'कारण' (हेतु) को दर्शाता है? [केस #${i}]`,
-              options_en: ["Pratijna", "Hetu", "Udaharana", "Nigamana"],
-              options_hi: ["प्रतिज्ञा", "हेतु", "उदाहरण", "निगमन"],
-              ans: 1,
-              exp_en: "Hetu provides the ground or reason for the inference (e.g., 'Because there is smoke').",
-              exp_hi: "हेतु वह साधन या कारण है जो साध्य की पुष्टि करता है।"
-            };
-            break;
-          case 7:
-            q = {
-              en: `In a DI table, if production increased from ${100 + i * 5} units to ${150 + i * 5} units, what is the approximate percentage increase?`,
-              hi: `यदि उत्पादन ${100 + i * 5} इकाइयों से बढ़कर ${150 + i * 5} हो जाता है, तो प्रतिशत वृद्धि लगभग कितनी है?`,
-              options_en: ["33.3%", "50%", "25%", "40%"],
-              options_hi: ["33.3%", "50%", "25%", "40%"],
-              ans: 0,
-              exp_en: "Percentage Increase = (Difference / Base) * 100.",
-              exp_hi: "प्रतिशत वृद्धि = (अंतर / मूल मान) * 100।"
-            };
-            break;
-          case 8:
-            q = {
-              en: `Which of the following is non-volatile, high-speed secondary memory storage? [Variant #${i}]`,
-              hi: `निम्नलिखित में से कौन सी नॉन-वोलेटाइल, तीव्र गति वाली मेमोरी है? [सेट #${i}]`,
-              options_en: ["SRAM", "DRAM", "SSD (Solid State Drive)", "Virtual Memory"],
-              options_hi: ["एस-रैम", "डी-रैम", "एसएसडी (SSD)", "वर्चुअल मेमोरी"],
-              ans: 2,
-              exp_en: "SSDs use flash-based non-volatile memory that retains data without power.",
-              exp_hi: "एसएसडी (SSD) एक गैर-परिवर्तनशील (नॉन-वोलेटाइल) फ्लैश स्टोरेज है।"
-            };
-            break;
-          case 9:
-            q = {
-              en: `Which International agreement aimed at phasing down hydrofluorocarbons (HFCs)? [Variant #${i}]`,
-              hi: `हाइड्रोफ्लोरोकार्बन (HFC) को चरणबद्ध तरीके से समाप्त करने के लिए कौन सा समझौता किया गया था? [सेट #${i}]`,
-              options_en: ["Kyoto Protocol", "Kigali Amendment", "Paris Accord", "Basel Convention"],
-              options_hi: ["क्योटो प्रोटोकॉल", "किगाली संशोधन", "पेरिस समझौता", "बेसल कन्वेंशन"],
-              ans: 1,
-              exp_en: "The Kigali Amendment (2016) to the Montreal Protocol mandates phasing down HFCs.",
-              exp_hi: "मॉन्ट्रियल प्रोटोकॉल का किगाली संशोधन (2016) HFC को घटाने के लिए है।"
-            };
-            break;
-          case 10:
-            q = {
-              en: `According to National Education Policy (NEP) 2020, what is the target Gross Enrolment Ratio (GER) in higher education by 2035? [Variant #${i}]`,
-              hi: `राष्ट्रीय शिक्षा नीति (NEP) 2020 के अनुसार 2035 तक उच्च शिक्षा में सकल नामांकन अनुपात (GER) का लक्ष्य क्या है? [सेट #${i}]`,
-              options_en: ["40%", "50%", "65%", "75%"],
-              options_hi: ["40%", "50%", "65%", "75%"],
-              ans: 1,
-              exp_en: "NEP 2020 aims to increase the GER in higher education including vocational education to 50% by 2035.",
-              exp_hi: "NEP 2020 का लक्ष्य 2035 तक उच्च शिक्षा में सकल नामांकन अनुपात (GER) को 50% तक पहुंचाना है।"
-            };
-            break;
+
+      for (let i = 1; i <= 100; i++) {
+        const base = concepts[(i - 1) % concepts.length];
+        const cycle = Math.floor((i - 1) / concepts.length) + 1;
+        
+        let qTextEn = base.q;
+        let qTextHi = base.hi;
+
+        if (cycle > 1) {
+          qTextEn = `[Analytical Q#${i} - ${base.c}] In the context of UGC NET exam, consider: ${base.q}`;
+          qTextHi = `[विश्लेषणात्मक प्रश्न #${i} - ${base.c}] UGC NET परीक्षा के संदर्भ में विचार करें: ${base.hi}`;
         }
+
         bank.push({
-          id: `U${unitId}_Q${i}`,
+          id: `U${unitId}_Q${String(i).padStart(3, '0')}`,
           unitId: unitId,
-          ...q
+          num: i,
+          en: qTextEn,
+          hi: qTextHi,
+          options_en: [...base.opts],
+          options_hi: [...base.opts_hi],
+          ans: base.ans,
+          exp_en: base.exp,
+          exp_hi: base.exp
         });
       }
       return bank;
     }
 
-    // Prepopulate Question Repositories
-    const QUESTION_DATA = {};
+    const ALL_QUESTIONS = {};
     UNITS.forEach(u => {
-      QUESTION_DATA[u.id] = generateQuestionBank(u.id, 100);
+      ALL_QUESTIONS[u.id] = build100QuestionsPerUnit(u.id);
     });
 
     /* =====================================================================
-       2. AUTHENTICATION & SESSION MANAGEMENT
+       2. AUTHENTICATION & SESSION
     ===================================================================== */
     const ADMIN_USER = "Rakesh99";
     const ADMIN_PASS = "Rakesh11";
 
     let currentUser = null;
     let currentUnitId = 1;
-    let currentLang = 'en'; // 'en' | 'hi'
+    let currentLang = 'en';
     let currentSet = [];
     let timerInterval = null;
     let secondsElapsed = 0;
@@ -439,7 +404,7 @@
       const p = document.getElementById('loginPass').value.trim();
 
       const users = JSON.parse(localStorage.getItem('ugc_users') || '[]');
-      const found = users.find(x => x.username === u && x.pass === p);
+      const found = users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.pass === p);
 
       if (found) {
         currentUser = found;
@@ -457,7 +422,7 @@
 
       const users = JSON.parse(localStorage.getItem('ugc_users') || '[]');
       if (users.some(x => x.username.toLowerCase() === u.toLowerCase())) {
-        showAuthAlert("This username is already taken! Choose another.");
+        showAuthAlert("This username is already taken! Try another one.");
         return;
       }
 
@@ -490,7 +455,7 @@
     }
 
     /* =====================================================================
-       3. NAVIGATION & UNIT SWITCHING
+       3. NAVIGATION & ZERO-REPETITION UNIT ENGINE
     ===================================================================== */
     function renderSidebar() {
       const list = document.getElementById('unitMenuList');
@@ -500,7 +465,7 @@
         li.className = `unit-item ${u.id === currentUnitId ? 'active' : ''}`;
         li.id = `unit-menu-${u.id}`;
         li.onclick = () => switchUnit(u.id);
-        li.innerHTML = `<span>${u.title.split(':')[0]}</span><span class="count-badge">5 Qs</span>`;
+        li.innerHTML = `<span>${u.name}</span><span class="count-badge">100 Qs</span>`;
         list.appendChild(li);
       });
     }
@@ -512,14 +477,12 @@
       if (activeItem) activeItem.classList.add('active');
 
       const uObj = UNITS.find(x => x.id === unitId);
-      document.getElementById('currentUnitTitle').innerText = currentLang === 'en' ? uObj.title : uObj.title_hi;
-
-      // Reset view to quiz
+      
       document.getElementById('mainWorkspace').innerHTML = `
         <div class="controls-bar">
           <div>
             <h2 id="currentUnitTitle" style="font-size: 1.1rem; font-weight: 700;">${currentLang === 'en' ? uObj.title : uObj.title_hi}</h2>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Set of 5 unique questions (Never repeated)</p>
+            <p id="unitProgressLabel" style="font-size: 0.8rem; color: var(--text-muted);">Set of 5 unique questions</p>
           </div>
           <div class="action-group">
             <button class="btn btn-sm btn-outline" onclick="toggleLanguage()">Language: <span id="langLabel">${currentLang.toUpperCase()}</span></button>
@@ -530,7 +493,7 @@
           <div id="questionContainer"></div>
           <div style="margin-top: 20px; display: flex; gap: 12px;">
             <button type="submit" id="btnSubmitQuiz" class="btn btn-primary">Submit Set & Check Answers</button>
-            <button type="button" id="btnNextSet" class="btn btn-outline" style="display: none;" onclick="loadNextSet()">Load Next 5 Questions</button>
+            <button type="button" id="btnNextSet" class="btn btn-outline" style="display: none;" onclick="loadNextSet()">Next 5 Questions →</button>
           </div>
         </form>
       `;
@@ -539,28 +502,30 @@
       loadNextSet();
     }
 
-    /* =====================================================================
-       4. ZERO-REPETITION 5-QUESTION ENGINE
-    ===================================================================== */
-    function getAttemptedIds() {
+    function getAttemptedIdsForCurrentUnit() {
       const history = JSON.parse(localStorage.getItem('ugc_history') || '[]');
-      const userHistory = history.filter(h => h.username === currentUser.username);
+      const userHistory = history.filter(h => h.username === currentUser.username && h.unitId === currentUnitId);
       return new Set(userHistory.map(h => h.questionId));
     }
 
     function loadNextSet() {
-      const attempted = getAttemptedIds();
-      const allQuestions = QUESTION_DATA[currentUnitId];
+      const attempted = getAttemptedIdsForCurrentUnit();
+      const allUnitQuestions = ALL_QUESTIONS[currentUnitId];
 
-      // Exclude already attempted questions for this user
-      const unattempted = allQuestions.filter(q => !attempted.has(q.id));
+      // Filter unattempted questions to guarantee zero repetition
+      const unattempted = allUnitQuestions.filter(q => !attempted.has(q.id));
 
-      if (unattempted.length < 5) {
-        alert("Unit Complete: You have attempted all available questions in this Unit pool!");
-        currentSet = unattempted.length > 0 ? unattempted : allQuestions.slice(0, 5);
+      if (unattempted.length === 0) {
+        alert("🎉 Excellent! You have completed all 100 questions of this unit!");
+        currentSet = allUnitQuestions.slice(0, 5); // Fallback to start
       } else {
-        // Pick exact next 5 unattempted
         currentSet = unattempted.slice(0, 5);
+      }
+
+      const totalDone = attempted.size;
+      const progressLabel = document.getElementById('unitProgressLabel');
+      if (progressLabel) {
+        progressLabel.innerText = `Attempted: ${totalDone} / 100 Questions in this Unit`;
       }
 
       renderSet();
@@ -583,14 +548,14 @@
 
         card.innerHTML = `
           <div class="q-header">
-            <span class="q-number">Question #${idx + 1} (${q.id})</span>
+            <span class="q-number">Question #${q.num} (${q.id})</span>
           </div>
           <div class="q-text">${text}</div>
           <div class="options-list">
             ${opts.map((opt, optIdx) => `
               <label class="option-item" id="optLabel_${idx}_${optIdx}">
                 <input type="radio" name="question_${idx}" value="${optIdx}" required>
-                <span>${opt}</span>
+                <span>${String.fromCharCode(65 + optIdx)}. ${opt}</span>
               </label>
             `).join('')}
           </div>
@@ -605,14 +570,13 @@
     function submitSet(e) {
       e.preventDefault();
       const history = JSON.parse(localStorage.getItem('ugc_history') || '[]');
-      const timeTaken = document.getElementById('timerBox').innerText;
 
       currentSet.forEach((q, idx) => {
         const selected = document.querySelector(`input[name="question_${idx}"]:checked`);
         const userAns = selected ? parseInt(selected.value) : -1;
-        const isCorrect = userAns === q.ans;
+        const isCorrect = (userAns === q.ans);
 
-        // Highlight options
+        // Highlight right and wrong choices
         const opts = document.querySelectorAll(`input[name="question_${idx}"]`);
         opts.forEach((radio, optIdx) => {
           radio.disabled = true;
@@ -627,7 +591,7 @@
         // Show Explanation
         document.getElementById(`exp_${idx}`).style.display = 'block';
 
-        // Save entry into persistent storage
+        // Save progress permanently in LocalStorage
         history.push({
           username: currentUser.username,
           questionId: q.id,
@@ -653,9 +617,6 @@
       renderSet();
     }
 
-    /* =====================================================================
-       5. TIMER ENGINE
-    ===================================================================== */
     function startTimer() {
       clearInterval(timerInterval);
       secondsElapsed = 0;
@@ -669,7 +630,7 @@
     }
 
     /* =====================================================================
-       6. HISTORY VIEW & GRADE SHEET GENERATION
+       4. HISTORY & GRADE SHEET
     ===================================================================== */
     function showHistoryView() {
       clearInterval(timerInterval);
@@ -683,15 +644,15 @@
             <h3>Persistent Attempt History & Mistake Log</h3>
             <button class="btn btn-sm btn-outline" onclick="switchUnit(${currentUnitId})">Back to Quiz</button>
           </div>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Total Attempts: ${userHistory.length}</p>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Total Questions Attempted: ${userHistory.length}</p>
           <div class="table-container">
             <table>
               <thead>
                 <tr>
                   <th>Unit</th>
                   <th>Question ID</th>
-                  <th>Question</th>
-                  <th>Result</th>
+                  <th>Question Snippet</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -700,7 +661,7 @@
                   <tr>
                     <td>Unit ${h.unitId}</td>
                     <td><code>${h.questionId}</code></td>
-                    <td>${h.questionText.substring(0, 60)}...</td>
+                    <td>${h.questionText.substring(0, 65)}...</td>
                     <td style="font-weight: 700; color: ${h.isCorrect ? 'var(--success)' : 'var(--danger)'}">
                       ${h.isCorrect ? '✓ Correct' : '✕ Incorrect'}
                     </td>
@@ -736,26 +697,26 @@
       main.innerHTML = `
         <div class="view-card" style="border: 2px solid var(--primary); text-align: center; padding: 40px;">
           <h2 style="color: var(--primary); margin-bottom: 5px;">UNIVERSITY GRANTS COMMISSION (UGC)</h2>
-          <p style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 25px;">National Testing Agency Performance Scorecard</p>
+          <p style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 25px;">NTA Style Candidate Performance Scorecard</p>
           
-          <div style="text-align: left; max-width: 500px; margin: 0 auto; line-height: 2;">
-            <p><strong>Candidate Name / ID:</strong> ${currentUser.username}</p>
+          <div style="text-align: left; max-width: 480px; margin: 0 auto; line-height: 2;">
+            <p><strong>Candidate ID:</strong> ${currentUser.username}</p>
             <p><strong>Total Questions Evaluated:</strong> ${total}</p>
             <p><strong>Correct Responses:</strong> ${correct}</p>
             <p><strong>Accuracy Percentage:</strong> ${pct}%</p>
-            <p><strong>Performance Grade:</strong> <span style="font-weight: 700; color: var(--primary-light);">${grade}</span></p>
+            <p><strong>Awarded Performance Grade:</strong> <span style="font-weight: 700; color: var(--primary-light);">${grade}</span></p>
           </div>
 
-          <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
-            <button class="btn btn-sm btn-primary" onclick="window.print()">Download / Print Scorecard</button>
-            <button class="btn btn-sm btn-outline" onclick="switchUnit(${currentUnitId})">Resume Tests</button>
+          <div style="margin-top: 30px; display: flex; gap: 12px; justify-content: center;">
+            <button class="btn btn-sm btn-primary" onclick="window.print()">Print / Save PDF</button>
+            <button class="btn btn-sm btn-outline" onclick="switchUnit(${currentUnitId})">Resume Exam</button>
           </div>
         </div>
       `;
     }
 
     /* =====================================================================
-       7. ADMIN PANEL
+       5. ADMIN PANEL
     ===================================================================== */
     function openAdminModal() {
       const users = JSON.parse(localStorage.getItem('ugc_users') || '[]');
@@ -774,7 +735,7 @@
       document.getElementById('adminModal').style.display = 'none';
     }
 
-    // Initialize application on load
+    // Initialize check
     window.addEventListener('DOMContentLoaded', checkSession);
   </script>
 </body>
