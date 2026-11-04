@@ -119,6 +119,11 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
     th { background: #f8fafc; font-weight: 600; }
+
+    .upload-fallback-box {
+      background: #eff6ff; border: 2px dashed #3b82f6; border-radius: 10px;
+      padding: 30px; text-align: center; margin: 20px 0;
+    }
   </style>
 </head>
 <body>
@@ -136,13 +141,13 @@
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
           <label>Username / Candidate ID</label>
-          <input type="text" id="loginUser" required placeholder="Enter Candidate ID">
+          <input type="text" id="loginUser" required placeholder="Admin: Rakesh99">
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input type="password" id="loginPass" required placeholder="••••••••">
+          <input type="password" id="loginPass" required placeholder="Admin: Rakesh11">
         </div>
-        <button type="submit" class="btn btn-primary">Login & Practice</button>
+        <button type="submit" class="btn btn-primary">Login & Start</button>
       </form>
 
       <!-- Register -->
@@ -160,7 +165,7 @@
     </div>
   </div>
 
-  <!-- MAIN APP CONTAINER -->
+  <!-- MAIN APP -->
   <div id="appContainer">
     <header>
       <div class="logo">UGC NET / JRF Paper 1 Mega Bank</div>
@@ -212,11 +217,23 @@
     let secondsElapsed = 0;
 
     async function loadQuestionsData() {
+      const cached = localStorage.getItem('ugc_cached_questions');
+      if (cached) {
+        try {
+          database = JSON.parse(cached);
+          return;
+        } catch(e) {}
+      }
+
       try {
-        const res = await fetch('questions.json');
-        database = await res.json();
+        const res = await fetch('./questions.json');
+        if (res.ok) {
+          database = await res.json();
+          localStorage.setItem('ugc_cached_questions', JSON.stringify(database));
+          return;
+        }
       } catch (e) {
-        console.error("questions.json file load hone mein error:", e);
+        console.warn("Could not fetch questions.json automatically.");
       }
     }
 
@@ -367,7 +384,15 @@
       const unattempted = allQuestions.filter(q => !attempted.has(q.id));
 
       if (allQuestions.length === 0) {
-        document.getElementById('questionsContainer').innerHTML = `<p style="color:var(--text-muted); padding:20px;">Questions file load ho rahi hai ya is unit ke questions upload hona baaki hain.</p>`;
+        document.getElementById('questionsContainer').innerHTML = `
+          <div class="upload-fallback-box">
+            <h3 style="color:var(--primary); margin-bottom:10px;">questions.json File Select Karein</h3>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:16px;">
+              questions.json file browser mein direct load karne ke liye niche <b>Choose File</b> par click karke apni <b>questions.json</b> file chunein:
+            </p>
+            <input type="file" id="localJsonPicker" accept=".json" onchange="handleManualJsonUpload(event)" style="font-size:0.9rem;">
+          </div>
+        `;
         document.getElementById('btnSubmit').style.display = 'none';
         return;
       }
@@ -384,6 +409,24 @@
       document.getElementById('btnSubmit').style.display = 'block';
       document.getElementById('btnNext').style.display = 'none';
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleManualJsonUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const parsed = JSON.parse(evt.target.result);
+          database = parsed;
+          localStorage.setItem('ugc_cached_questions', JSON.stringify(parsed));
+          alert("✓ File successfully load ho gayi! Ab questions start ho rahe hain.");
+          loadNextSet();
+        } catch(err) {
+          alert("Error: File format invalid hai!");
+        }
+      };
+      reader.readAsText(file);
     }
 
     function renderCurrentSet() {
